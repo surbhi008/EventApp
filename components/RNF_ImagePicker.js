@@ -33,7 +33,7 @@ export default function RNF_ImagePicker() {
   };
 
   return (
-    <View style={{ height:100, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{alignItems: 'center', justifyContent: 'center' }}>
       <Button title="Pick an image from camera roll" onPress={pickImage} />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
     </View>
