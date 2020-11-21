@@ -159,8 +159,8 @@ export default class SignUp extends React.Component {
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>SIGN UP</Text>
                 </Button>
-                <Button color="transparent" shadowless onPress={() => navigation.navigate('Sign In')}>
-                  <Text center color={theme.COLORS.BLACK} size={theme.SIZES.FONT}>
+                <Button color="transparent" shadowless onPress={() => navigation.navigate('SIGN IN')}>
+                  <Text center color={theme.COLORS.WHITE} size={theme.SIZES.FONT}>
                     Already have an account? Sign In
                   </Text>
                 </Button>

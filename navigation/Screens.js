@@ -742,7 +742,7 @@ function AppStack(props) {
 
 export default function OnboardingStack() {
   return (
-    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="screen">
+    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="none">
     <Stack.Screen
         name="SIGN IN"
         component={SignInScreen}
