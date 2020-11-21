@@ -11,9 +11,9 @@ const { height, width } = Dimensions.get('window');
 
 export default class SignUp extends React.Component {
   state = {
-    user: '-',
-    email: '-',
-    password: '-',
+    user: '',
+    email: '',
+    password: '',
     active: {
       user: false,
       email: false,

@@ -11,6 +11,8 @@ enableScreens();
 
 import Screens from './navigation/Screens';
 import { Images, materialTheme } from './constants/';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const assetImages = [
   Images.Profile,
@@ -61,6 +63,7 @@ export default class App extends React.Component {
       );
     } else {
       return (
+        <Provider store={store}>
         <NavigationContainer>
           <GalioProvider theme={materialTheme}>
             <Block flex>
@@ -69,6 +72,7 @@ export default class App extends React.Component {
             </Block>
           </GalioProvider>
         </NavigationContainer>
+        </Provider>
       );
     }
   }

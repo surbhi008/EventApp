@@ -6,13 +6,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme } from '../constants/';
 import { HeaderHeight } from "../constants/utils";
 import { StackActions } from '@react-navigation/native';
+import { compose } from "recompose"
+import { callLogin } from '../actions';
+import { connect } from 'react-redux'
 
 const { width } = Dimensions.get('window');
 
-export default class SignIn extends React.Component {
+class SignIn extends React.Component {
   state = {
-    email: '-',
-    password: '-',
+    email: "",
+    password: "",
     active: {
       email: false,
       password: false,
@@ -28,6 +31,31 @@ export default class SignIn extends React.Component {
     active[name] = !active[name];
 
     this.setState({ active });
+  }
+
+  handleLogin () {
+    const {
+      email, password
+    } = this.state
+    const { navigation } = this.props;
+    if (email.length === 0 || password.length === 0) {
+      Alert.alert("Please provide user and password")
+      return
+    }
+    const request = {
+      userName: email,
+      password: password,
+      callback: (response) => {
+        if (response.success) {
+          navigation.dispatch(
+            StackActions.replace('Home', {
+          }));
+        } else {
+          Alert.alert("User not authorized")
+        }     
+      }
+    }
+    this.props.callLogin(request)
   }
 
   render() {
@@ -98,14 +126,14 @@ export default class SignIn extends React.Component {
               <Block center>
                 <Input
                   borderless
-                  color="black"
+                  color="white"
                   placeholder="Email"
                   type="email-address"
                   autoCapitalize="none"
                   bgColor='transparent'
                   onBlur={() => this.toggleActive('email')}
                   onFocus={() => this.toggleActive('email')}
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={theme.COLORS.MUTED}
                   onChangeText={text => this.handleChange('email', text)}
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
                 />
@@ -113,13 +141,13 @@ export default class SignIn extends React.Component {
                   password
                   viewPass
                   borderless
-                  color="black"
-                  iconColor="black"
+                  color="white"
+                  iconColor="white"
                   placeholder="Password"
                   bgColor='transparent'
                   onBlur={() => this.toggleActive('password')}
                   onFocus={() => this.toggleActive('password')}
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={theme.COLORS.MUTED}
                   onChangeText={text => this.handleChange('password', text)}
                   style={[styles.input, this.state.active.password ? styles.inputActive : null]}
                 />
@@ -138,10 +166,11 @@ export default class SignIn extends React.Component {
                   color={materialTheme.COLORS.BUTTON_COLOR}
                   style={{ height: 48 }}
                   onPress={() => 
-                  navigation.dispatch(
-                    StackActions.replace('Home', {
-                    })
-                  )}
+                  {
+                    this.handleLogin()
+                  }
+                  
+                  }
                 >
                   {/* Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,) */}
                   <Text
@@ -195,3 +224,21 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  callLogin: (data) => dispatch(callLogin(data)),
+})
+
+const mapStateToProps = (state) => ({
+  // videos: state.video,
+  // getVideoData: videoSelector
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+)
+
+export default compose(container)(SignIn)
