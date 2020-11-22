@@ -6,18 +6,23 @@ import { Block, Button, Input, Text, theme } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme } from '../constants/';
 import { HeaderHeight } from "../constants/utils";
+import { compose } from "recompose"
+import { callSignUp } from '../actions';
+import { connect } from 'react-redux'
 
 const { height, width } = Dimensions.get('window');
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   state = {
-    user: '',
+    userName: '',
     email: '',
     password: '',
+    confirmPassword: '',
     active: {
-      user: false,
+      userName: false,
       email: false,
       password: false,
+      confirmPassword: false,
     }
   }
 
@@ -32,8 +37,46 @@ export default class SignUp extends React.Component {
     this.setState({ active });
   }
 
+  handleSignup () {
+    const { navigation } = this.props;
+    const {userName, email, password,  confirmPassword} = this.state
+    if (userName.length === 0) {
+      Alert.alert("Please provide Full Name.")
+      return
+    } else if (email.length === 0) {
+      Alert.alert("Please provide Email.")
+      return
+    } else if (password.length === 0) {
+      Alert.alert("Please provide Password.")
+      return
+    } else if (confirmPassword.length === 0) {
+      Alert.alert("Please provide Confirm Password.")
+      return
+    } else if (password !== confirmPassword) {
+      Alert.alert("Password & Confirm Password doesn't Match.")
+      return
+    }
+    password.length === 0
+    const request = {
+      userName: userName,
+      email: email,
+      password: password,
+      callback: (response) => {
+        if (response.success) {
+          navigation.dispatch(
+            StackActions.replace('Home', {
+          }));
+        } else {
+          Alert.alert("User not authorized")
+        }     
+      }
+    }
+    this.props.callSignUp(request)
+  }
+
   render() {
     const { navigation } = this.props;
+    const {userName, email, password} = this.state;
     return (
       <LinearGradient
         start={{ x: 0, y: 0 }}
@@ -97,21 +140,21 @@ export default class SignUp extends React.Component {
               <Block center>
                 <Input
                   bgColor='transparent'
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={materialTheme.COLORS.MUTED}
                   borderless
-                  color="black"
+                  color="white"
                   placeholder="Full Name"
                   autoCapitalize="none"
-                  style={[styles.input, this.state.active.user ? styles.inputActive : null]}
-                  onChangeText={text => this.handleChange('user', text)}
-                  onBlur={() => this.toggleActive('user')}
-                  onFocus={() => this.toggleActive('user')}
+                  style={[styles.input, this.state.active.userName ? styles.inputActive : null]}
+                  onChangeText={text => this.handleChange('userName', text)}
+                  onBlur={() => this.toggleActive('userName')}
+                  onFocus={() => this.toggleActive('userName')}
                 />
                 <Input
                   bgColor='transparent'
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={materialTheme.COLORS.MUTED}
                   borderless
-                  color="black"
+                  color="white"
                   type="email-address"
                   placeholder="Email"
                   autoCapitalize="none"
@@ -122,13 +165,13 @@ export default class SignUp extends React.Component {
                 />
                 <Input
                   bgColor='transparent'
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={materialTheme.COLORS.MUTED}
                   borderless
-                  color="black"
+                  color="white"
                   password
                   viewPass
                   placeholder="Password"
-                  iconColor="black"
+                  iconColor="white"
                   style={[styles.input, this.state.active.password ? styles.inputActive : null]}
                   onChangeText={text => this.handleChange('password', text)}
                   onBlur={() => this.toggleActive('password')}
@@ -136,17 +179,17 @@ export default class SignUp extends React.Component {
                 />
                 <Input
                   bgColor='transparent'
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  placeholderTextColor={materialTheme.COLORS.MUTED}
                   borderless
-                  color="black"
+                  color="white"
                   password
                   viewPass
                   placeholder="Confirm Password"
-                  iconColor="black"
-                  style={[styles.input, this.state.active.password ? styles.inputActive : null]}
-                  onChangeText={text => this.handleChange('password', text)}
-                  onBlur={() => this.toggleActive('password')}
-                  onFocus={() => this.toggleActive('password')}
+                  iconColor="white"
+                  style={[styles.input, this.state.active.confirmPassword ? styles.inputActive : null]}
+                  onChangeText={text => this.handleChange('confirmPassword', text)}
+                  onBlur={() => this.toggleActive('confirmPassword')}
+                  onFocus={() => this.toggleActive('confirmPassword')}
                 />
               </Block>
               <Block flex top style={{ marginTop: 20 }}>
@@ -154,6 +197,7 @@ export default class SignUp extends React.Component {
                   shadowless
                   style={{ height: 48 }}
                   color={materialTheme.COLORS.BUTTON_COLOR}
+                  onPress={() => {this.handleSignup()}}
                 >
                   <Text
                     color={theme.COLORS.BLACK} 
@@ -200,3 +244,21 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  callSignUp: (data) => dispatch(callSignUp(data)),
+})
+
+const mapStateToProps = (state) => ({
+  // videos: state.video,
+  // getVideoData: videoSelector
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+)
+
+export default compose(container)(SignUp)

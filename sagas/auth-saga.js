@@ -1,5 +1,5 @@
 import { put, takeLatest, all,call } from 'redux-saga/effects';
-import { login } from '../api/auth-api';
+import { login, signup } from '../api/auth-api';
 
 // fetch login
 function* loginSaga(action) {
@@ -15,8 +15,29 @@ function* actionWatcher() {
     yield takeLatest('LOGIN_API', loginSaga)
 }
 
+// export default function* rootSaga() {
+//     yield all([
+        
+//     ]);
+// }
+
+// fetch signup
+function* signupSaga(action) {
+    const { callback, userName, email, password} = action.data       
+    const json = yield call(signup, "http://axe-ventura-api.vidhikaar.com/api/V1/Authentication/Register", {userName, email, password})
+    if (callback) {
+        callback(json)
+    }
+    yield put({ type: "signup", json: json, });
+}
+
+function* actionWatcherSignUp() {
+    yield takeLatest('SIGNUP_API', signupSaga)
+}
+
 export default function* rootSaga() {
     yield all([
         actionWatcher(),
+        actionWatcherSignUp(),
     ]);
 }
