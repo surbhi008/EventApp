@@ -9,6 +9,7 @@ import { HeaderHeight } from "../constants/utils";
 import { compose } from "recompose"
 import { callSignUp } from '../actions';
 import { connect } from 'react-redux'
+import withLoadingScreen from '../HOC/spinner';
 
 const { height, width } = Dimensions.get('window');
 
@@ -67,7 +68,7 @@ class SignUp extends React.Component {
             StackActions.replace('Home', {
           }));
         } else {
-          Alert.alert("User not authorized")
+          Alert.alert("Registration Failed.")
         }     
       }
     }
@@ -250,7 +251,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-  // videos: state.video,
+  isLoading: state.isLoading,
   // getVideoData: videoSelector
 })
 
@@ -259,6 +260,7 @@ const container = compose(
       mapStateToProps,
       mapDispatchToProps
   ),
+  withLoadingScreen
 )
 
 export default compose(container)(SignUp)

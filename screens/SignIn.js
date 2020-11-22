@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform } from 'react-native';
 import { Block, Button, Input, Text, theme } from 'galio-framework';
-
+import { View, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme } from '../constants/';
 import { HeaderHeight } from "../constants/utils";
 import { StackActions } from '@react-navigation/native';
 import { compose } from "recompose"
+
 import { callLogin } from '../actions';
 import { connect } from 'react-redux'
+import withLoadingScreen from '../HOC/spinner';
 
 const { width } = Dimensions.get('window');
 
@@ -68,8 +70,8 @@ class SignIn extends React.Component {
         end={{ x: 0.25, y: 1.1 }}
         locations={[0.2, 1]}
         colors={['#000000', '#000000']}
-        style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>
-        <Block flex middle>
+        style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>           
+        <Block flex middle>    
           <KeyboardAvoidingView behavior="padding" enabled>
             <Block middle>
               <Block row center space="between" style={{ marginVertical: theme.SIZES.BASE * 0.1 }}>
@@ -230,7 +232,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-  // videos: state.video,
+  isLoading: state.isLoading,
   // getVideoData: videoSelector
 })
 
@@ -239,6 +241,7 @@ const container = compose(
       mapStateToProps,
       mapDispatchToProps
   ),
+  withLoadingScreen
 )
 
 export default compose(container)(SignIn)

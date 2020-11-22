@@ -4,31 +4,27 @@ import { login, signup } from '../api/auth-api';
 // fetch login
 function* loginSaga(action) {
     const { callback, userName, password } = action.data       
+    yield put({ type: "IS_LOADING", data: true, });
     const json = yield call(login, "http://axe-ventura-api.vidhikaar.com/api/V1/Authentication/Login", {userName, password})
     if (callback) {
         callback(json)
     }
-    yield put({ type: "login", json: json, });
+    yield put({ type: "IS_LOADING", data: false, });
 }
 
 function* actionWatcher() {
     yield takeLatest('LOGIN_API', loginSaga)
 }
 
-// export default function* rootSaga() {
-//     yield all([
-        
-//     ]);
-// }
-
 // fetch signup
 function* signupSaga(action) {
-    const { callback, userName, email, password} = action.data       
+    const { callback, userName, email, password} = action.data   
+    yield put({ type: "IS_LOADING", data: true, });    
     const json = yield call(signup, "http://axe-ventura-api.vidhikaar.com/api/V1/Authentication/Register", {userName, email, password})
     if (callback) {
         callback(json)
     }
-    yield put({ type: "signup", json: json, });
+    yield put({ type: "IS_LOADING", data: false, });
 }
 
 function* actionWatcherSignUp() {
