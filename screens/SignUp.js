@@ -10,7 +10,7 @@ import { compose } from "recompose"
 import { callSignUp } from '../actions';
 import { connect } from 'react-redux'
 import withLoadingScreen from '../HOC/spinner';
-
+import { StackActions } from '@react-navigation/native';
 const { height, width } = Dimensions.get('window');
 
 class SignUp extends React.Component {
@@ -63,10 +63,10 @@ class SignUp extends React.Component {
       email: email,
       password: password,
       callback: (response) => {
-        if (response.success) {
-          navigation.dispatch(
-            StackActions.replace('Home', {
-          }));
+        if (response.success) {   
+          Alert.alert("Registration successful.")       
+          const popAction = StackActions.pop(1);
+          navigation.dispatch(popAction);
         } else {
           Alert.alert("Registration Failed.")
         }     
