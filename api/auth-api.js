@@ -1,12 +1,9 @@
 
 const handleError = (response) => {
-    return response.status == 200 ? 
-    {
-        success: true,
-       data: response.data
-    } : {
-        success: false,
-       data: {}
+    return {
+        success: response.status == 200,
+        data: response.data,
+        message: response.message || "Something went wrong."
     }
 }
 

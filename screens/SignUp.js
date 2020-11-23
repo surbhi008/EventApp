@@ -4,8 +4,8 @@ import { Alert, Dimensions, StyleSheet, KeyboardAvoidingView, Platform } from 'r
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import { materialTheme } from '../constants/';
-import { HeaderHeight } from "../constants/utils";
+import { materialTheme, utils } from '../constants/';
+import { HeaderHeight, validatePassword } from "../constants/utils";
 import { compose } from "recompose"
 import { callSignUp } from '../actions';
 import { connect } from 'react-redux'
@@ -53,10 +53,15 @@ class SignUp extends React.Component {
     } else if (confirmPassword.length === 0) {
       Alert.alert("Please provide Confirm Password.")
       return
+    } else if (!(validatePassword(password))) {
+      Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+      return
     } else if (password !== confirmPassword) {
       Alert.alert("Password & Confirm Password doesn't Match.")
       return
     }
+
+
     password.length === 0
     const request = {
       userName: userName,
@@ -68,7 +73,7 @@ class SignUp extends React.Component {
           const popAction = StackActions.pop(1);
           navigation.dispatch(popAction);
         } else {
-          Alert.alert("Registration Failed.")
+          Alert.alert(response.message)
         }     
       }
     }

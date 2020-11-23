@@ -53,7 +53,7 @@ class SignIn extends React.Component {
             StackActions.replace('Home', {
           }));
         } else {
-          Alert.alert("User not authorized")
+          Alert.alert(response.message)
         }     
       }
     }
