@@ -815,7 +815,7 @@ function dashboardStack (props) {
           }}
         /> */}
          <Tab.Screen
-          name="SettingsStack"
+          name="Settings"
           component={SettingsScreen}
           options={{
             tabBarLabel: 'Settings',

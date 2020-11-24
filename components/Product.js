@@ -17,14 +17,20 @@ class Product extends React.Component {
                 <Text size={14} style={styles.productTitle}>{product.title}</Text>
                 <Text size={12} style={styles.productTitle}>{product.time}</Text>
             </Block>
-            <Button shadowless style={styles.joinEventButton} onPress={() => navigation.navigate('Categories')}>
+            <Button shadowless style={styles.joinEventButton} onPress={() => 
+              {
+                // navigation.navigate('Categories')
+            }}>
               <Block row middle>
                 {/* <Icon name="grid" family="feather" style={{  }} /> */}
                 <Text size={16} style={styles.tabTitle}>Join Event</Text>
               </Block>
           </Button>
           </Block>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Product', { product: product })}>
+        <TouchableWithoutFeedback onPress={() => 
+          {// navigation.navigate('Product', { product: product })
+        }
+        }>
           <Block flex style={[styles.imageContainer, styles.shadow]}>
             <Image source={{ uri: product.image }} style={imageStyles} />
           </Block>

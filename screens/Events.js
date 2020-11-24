@@ -31,13 +31,20 @@ export default class Events extends React.Component {
 
     return (
       <Block row style={styles.tabs}>
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Categories')}>
+        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => 
+          {// navigation.navigate('Categories')
+        }
+          }>
           <Block row middle>
             {/* <Icon name="grid" family="feather" style={{  }} /> */}
             <Text size={16} style={styles.tabTitle}>Events Nearby</Text>
           </Block>
         </Button>
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Deals')}>
+        <Button shadowless style={styles.tab} onPress={() => 
+          {
+            //navigation.navigate('Deals')
+          }
+          }>
           <Block row middle>
             {/* <Icon size={16} name="camera-18" family="GalioExtra" style={{  }} /> */}
             <Text size={16} style={styles.tabTitle}>Events By Followers</Text>
