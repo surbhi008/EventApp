@@ -7,9 +7,13 @@ import { Icon, Product } from '../components/';
 
 const { width } = Dimensions.get('screen');
 import homeImages from '../constants/images/home';
+import { compose } from "recompose"
 
-export default class Home extends React.Component {
-  renderSearch = () => {
+import { connect } from 'react-redux'
+
+class Home extends React.Component {
+
+    renderSearch = () => {
     const { navigation } = this.props;
     const iconContent = <Icon size={16} color={theme.COLORS.MUTED} name="zoom-in" family="material" />
 
@@ -126,3 +130,20 @@ const styles = StyleSheet.create({
     paddingVertical: theme.SIZES.BASE * 2,
   },
 });
+
+const mapDispatchToProps = () => ({
+})
+
+const mapStateToProps = (state) => ({
+  authData: state.authData,
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+  // withLoadingScreen
+)
+
+export default compose(container)(Home)

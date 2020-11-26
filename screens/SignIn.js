@@ -24,6 +24,11 @@ class SignIn extends React.Component {
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { pickerHeight: 0 };
+  }
+
   handleChange = (name, value) => {
     this.setState({ [name]: value });
   }

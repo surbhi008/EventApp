@@ -7,3 +7,8 @@ export const callSignUp = (data) => ({
     type: "SIGNUP_API",
     data: data
 });
+
+export const loginDataAction = (data) => ({
+    type: "AUTH_DATA",
+    data: data
+});
