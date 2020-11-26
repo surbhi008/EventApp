@@ -5,6 +5,5 @@ import { profileActionWatcher } from "./sagas/profile-saga";
 export default function* rootSaga() {
   yield all([
       authActionWatcher(),
-      profileActionWatcher()
   ]);
 }
