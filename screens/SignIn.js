@@ -129,8 +129,7 @@ class SignIn extends React.Component {
                 <Input
                   borderless
                   color="white"
-                  placeholder="Email"
-                  type="email-address"
+                  placeholder="Username"
                   autoCapitalize="none"
                   bgColor='transparent'
                   onBlur={() => this.toggleActive('email')}
