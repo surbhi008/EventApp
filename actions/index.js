@@ -8,6 +8,11 @@ export const callSignUp = (data) => ({
     data: data
 });
 
+export const callUpdateProfile = (data) => ({
+    type: "UPDATEPROFILE_API",
+    data: data
+});
+
 export const loginDataAction = (data) => ({
     type: "AUTH_DATA",
     data: data

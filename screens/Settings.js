@@ -3,6 +3,11 @@ import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } 
 import { Block, Text, theme, Button, Input } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { compose } from "recompose"
+import { callUpdateProfile } from '../actions';
+import { connect } from 'react-redux'
+import withLoadingScreen from '../HOC/spinner';
+
 import { Icon } from '../components';
 import { Images, materialTheme } from '../constants';
 import { HeaderHeight } from "../constants/utils";
@@ -14,11 +19,83 @@ import { Keyboard } from 'react-native'
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { pickerHeight: 0 };
+  }
+
+  state = {
+    userId: '',
+    userName: '',
+    fullName: '',
+    email: '',
+    imageURL: '',
+    miles: '',
+    address: '',
+    locationLatLong: '',
+    password: '',
+    active: {
+      userId: false,
+      userName: false,
+      fullName: false,
+      email: false,
+      imageURL: false,
+      miles: false,
+      address: false,
+      locationLatLong: false,
+      password: false,
+    }
+  }
+
+  handleUpdateProfile () {
+    const { navigation } = this.props;
+    const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state
+    // if (userName.length === 0) {
+    //   Alert.alert("Please provide Full Name.")
+    //   return
+    // } else if (email.length === 0) {
+    //   Alert.alert("Please provide Email.")
+    //   return
+    // } else if (password.length === 0) {
+    //   Alert.alert("Please provide Password.")
+    //   return
+    // } else if (confirmPassword.length === 0) {
+    //   Alert.alert("Please provide Confirm Password.")
+    //   return
+    // } else if (!(validatePassword(password))) {
+    //   Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+    //   return
+    // } else if (password !== confirmPassword) {
+    //   Alert.alert("Password & Confirm Password doesn't Match.")
+    //   return
+    // }
+
+
+    password.length === 0
+    const request = {
+      userId: userId,
+      userName: userName,
+      fullName: fullName,
+      email: email,
+      imageURL: imageURL,
+      miles: miles,
+      address: address,
+      locationLatLong: locationLatLong,
+      password: password,
+
+      callback: (response) => {
+        if (response.success) {   
+          Alert.alert("Registration successful.")       
+          const popAction = StackActions.pop(1);
+          navigation.dispatch(popAction);
+        } else {
+          Alert.alert(response.message)
+        }     
+      }
+    }
+    this.props.callUpdateProfile(request)
   }
 
   render() {
@@ -145,6 +222,7 @@ export default class Settings extends React.Component {
                   shadowless
                   style={styles.addToCart}
                   color={materialTheme.COLORS.BUTTON_COLOR}
+                  onPress={() => {this.handleUpdateProfile()}}
                   >
                   <Text
                     color={theme.COLORS.BLACK} 
@@ -241,3 +319,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 1
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  callUpdateProfile: (data) => dispatch(callUpdateProfile(data)),
+})
+
+const mapStateToProps = (state) => ({
+  // videos: state.video,
+  // getVideoData: videoSelector
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+  withLoadingScreen
+)
+
+export default compose(container)(Settings)

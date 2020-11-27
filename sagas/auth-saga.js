@@ -1,5 +1,5 @@
 import { put, takeLatest,call } from 'redux-saga/effects';
-import { login, signup } from '../api/auth-api';
+import { login, signup} from '../api/auth-api';
 import { web_urls } from '../api/api-const';
 
 // fetch login
@@ -18,7 +18,7 @@ function* loginSaga(action) {
 function* signupSaga(action) {
     const { callback, userName, email, password} = action.data   
     yield put({ type: "IS_LOADING", data: true, });    
-    const json = yield call(signup, "http://event-api.vidhikaar.com/api/V1/Authentication/Register", {userName, email, password})
+    const json = yield call(signup, `${web_urls.BASE_URL}${web_urls.SIGNUP_ENDPOINT}`, {userName, email, password})
     if (callback) {
         callback(json)
     }

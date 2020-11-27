@@ -40,7 +40,7 @@ class SignUp extends React.Component {
 
   handleSignup () {
     const { navigation } = this.props;
-    const {userName, email, password,  confirmPassword} = this.state
+    const {userName, email, password, confirmPassword} = this.state
     if (userName.length === 0) {
       Alert.alert("Please provide Full Name.")
       return
