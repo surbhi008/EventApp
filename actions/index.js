@@ -12,3 +12,8 @@ export const loginDataAction = (data) => ({
     type: "AUTH_DATA",
     data: data
 });
+
+export const profileApiCall = (data) => ({
+    type: "PROFILE_API",
+    data: data
+});

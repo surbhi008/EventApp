@@ -1,4 +1,4 @@
-const profileReducer = (state = {}, action, loading) => {
+const profileReducer = (state = {}, action) => {
     switch (action.type) {
         case 'IS_LOADING':
             return { ...state, isLoading: action.data };

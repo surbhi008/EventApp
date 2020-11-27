@@ -7,8 +7,8 @@ function* loginSaga(action) {
     const { callback, userName, password } = action.data       
     yield put({ type: "IS_LOADING", data: true, });
     const json = yield call(login, `${web_urls.BASE_URL}${web_urls.LOGIN_ENDPOINT}`, {userName, password})
+    yield put({ type: "AUTH_DATA", data: json.data, });
     if (callback) {
-        yield put({ type: "AUTH_DATA", data: json.data, });
         callback(json)
     }
     yield put({ type: "IS_LOADING", data: false, });

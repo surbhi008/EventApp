@@ -9,8 +9,16 @@ import { HeaderHeight } from "../constants/utils";
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
+import { compose } from "recompose"
+import { connect } from 'react-redux'
+import withLoadingScreen from '../HOC/spinner';
 
-export default class Profile extends React.Component {
+class Profile extends React.Component {
+  
+  componentDidMount() {
+    console.log("profileData",this.props.profileData)
+  }
+
   render() {
     return (
       <LinearGradient
@@ -146,3 +154,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  getProfileData: (data) => dispatch(profileApiCall(data)),
+})
+
+const mapStateToProps = (state) => ({
+  profileData: state.profileData,
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+  withLoadingScreen
+)
+
+export default compose(container)(Profile)

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
+import withLoadingScreen from '../HOC/spinner';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, Product } from '../components';
@@ -10,8 +11,17 @@ import homeImages from '../constants/images/home';
 import { compose } from "recompose"
 
 import { connect } from 'react-redux'
+import { profileApiCall } from '../actions';
 
 class Events extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  componentDidMount() {
+    this.props.getProfileData()
+  }
+
   renderSearch = () => {
     const { navigation } = this.props;
     const iconContent = <Icon size={16} color={theme.COLORS.MUTED} name="zoom-in" family="material" />
@@ -142,7 +152,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch) => ({
+  getProfileData: (data) => dispatch(profileApiCall(data)),
 })
 
 const mapStateToProps = (state) => ({
@@ -154,7 +165,7 @@ const container = compose(
       mapStateToProps,
       mapDispatchToProps
   ),
-  // withLoadingScreen
+  withLoadingScreen
 )
 
 export default compose(container)(Events)

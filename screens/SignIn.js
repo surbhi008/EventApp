@@ -232,7 +232,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   isLoading: state.isLoading,
-  // getVideoData: videoSelector
 })
 
 const container = compose(
