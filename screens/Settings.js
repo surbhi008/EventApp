@@ -10,7 +10,7 @@ import withLoadingScreen from '../HOC/spinner';
 
 import { Icon } from '../components';
 import { Images, materialTheme } from '../constants';
-import { HeaderHeight } from "../constants/utils";
+import { HeaderHeight, validatePassword } from "../constants/utils";
 import RNF_ImagePicker from '../components/RNF_ImagePicker';
 import MapView from 'react-native-maps';
 import { Picker } from 'react-native';
@@ -49,33 +49,35 @@ class Settings extends React.Component {
     }
   }
 
+  handleChange = (name, value) => {
+    this.setState({ [name]: value });
+  }
+
   handleUpdateProfile () {
     const { navigation } = this.props;
     const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state
-    if (password.length === 0) {
+    if (password) {
       Alert.alert("Please provide Password.")
       return
     }  else if (!(validatePassword(password))) {
       Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
       return
-    } else if (fullName.length === 0) {
+    } else if (fullName) {
       Alert.alert("Please provide Full Name.")
       return
-    } else if (miles.length === 0) {
+    } else if (miles) {
       Alert.alert("Please provide Miles.")
       return
-    } else if (address.length === 0) {
+    } else if (address) {
       Alert.alert("Please provide Address.")
       return
-    } else if (locationLatLong.length === 0) {
+    } else if (locationLatLong) {
       Alert.alert("Please select Location.")
       return
-    } else if (imageURL.length === 0) {
+    } else if (imageURL) {
       Alert.alert("Please upload Profile Image.")
       return
     }
-    
-
 
     // password.length === 0
     const request = {
@@ -119,6 +121,7 @@ class Settings extends React.Component {
 
   render() {
     // const pickerHeight = 0
+    const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state;
     return (
       <LinearGradient
         start={{ x: 0, y: 0 }}
