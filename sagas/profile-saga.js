@@ -1,7 +1,7 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
-import { getAuthData, updateProfile } from '../reducers/auth-reducer';
+import { getAuthData } from '../reducers/auth-reducer';
 import { web_urls } from '../api/api-const';
-import { profile } from '../api/profile-api';
+import { profile, updateProfile } from '../api/profile-api';
 
 function* getProfileSaga() {
     yield put({ type: "IS_LOADING", data: true, });
@@ -25,6 +25,6 @@ function* updateProfileSaga(action) {
 
 export function* profileActionWatcher() {
     yield takeLatest('PROFILE_API', getProfileSaga)
-    yield takeLatest('callUpdateProfile', updateProfileSaga)
+    yield takeLatest('UPDATEPROFILE_API', updateProfileSaga)
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, Alert } from 'react-native';
 import { Block, Text, theme, Button, Input } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -52,28 +52,32 @@ class Settings extends React.Component {
   handleUpdateProfile () {
     const { navigation } = this.props;
     const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state
-    // if (userName.length === 0) {
-    //   Alert.alert("Please provide Full Name.")
-    //   return
-    // } else if (email.length === 0) {
-    //   Alert.alert("Please provide Email.")
-    //   return
-    // } else if (password.length === 0) {
-    //   Alert.alert("Please provide Password.")
-    //   return
-    // } else if (confirmPassword.length === 0) {
-    //   Alert.alert("Please provide Confirm Password.")
-    //   return
-    // } else if (!(validatePassword(password))) {
-    //   Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
-    //   return
-    // } else if (password !== confirmPassword) {
-    //   Alert.alert("Password & Confirm Password doesn't Match.")
-    //   return
-    // }
+    if (password.length === 0) {
+      Alert.alert("Please provide Password.")
+      return
+    }  else if (!(validatePassword(password))) {
+      Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+      return
+    } else if (fullName.length === 0) {
+      Alert.alert("Please provide Full Name.")
+      return
+    } else if (miles.length === 0) {
+      Alert.alert("Please provide Miles.")
+      return
+    } else if (address.length === 0) {
+      Alert.alert("Please provide Address.")
+      return
+    } else if (locationLatLong.length === 0) {
+      Alert.alert("Please select Location.")
+      return
+    } else if (imageURL.length === 0) {
+      Alert.alert("Please upload Profile Image.")
+      return
+    }
+    
 
 
-    password.length === 0
+    // password.length === 0
     const request = {
       userId: userId,
       userName: userName,
@@ -87,15 +91,30 @@ class Settings extends React.Component {
 
       callback: (response) => {
         if (response.success) {   
-          Alert.alert("Registration successful.")       
-          const popAction = StackActions.pop(1);
-          navigation.dispatch(popAction);
+          Alert.alert("Profile Updated Successfully.")
+          // const popAction = StackActions.pop(1);
+          // navigation.dispatch(popAction);
         } else {
           Alert.alert(response.message)
         }     
       }
     }
     this.props.callUpdateProfile(request)
+  }
+
+  componentDidMount() {
+    console.log("profileData",this.props.profileData)
+    this.setState({
+      userId: this.props.profileData && this.props.profileData.userDetail.userId,
+      userName: this.props.profileData && this.props.profileData.userDetail.userName,
+      fullName: this.props.profileData && this.props.profileData.userDetail.fullName,
+      email: this.props.profileData && this.props.profileData.userDetail.email,
+      imageURL: this.props.profileData && this.props.profileData.userDetail.imageURL,
+      miles: this.props.profileData && this.props.profileData.userDetail.miles,
+      address: this.props.profileData && this.props.profileData.userDetail.address,
+      locationLatLong: this.props.profileData && this.props.profileData.userDetail.locationLatLong,
+      password: this.props.profileData && this.props.profileData.userDetail.password,
+    })
   }
 
   render() {
@@ -115,15 +134,15 @@ class Settings extends React.Component {
           imageStyle={styles.profileImage}>
           <Block flex style={styles.profileDetails}>
             <Block style={styles.profileTexts}>
-              <Text color="white" size={28} style={{ paddingBottom: 8 }}>Rachel Brown</Text>
+              <Text color="white" size={28} style={{ paddingBottom: 8 }}>{this.state.fullName}</Text>
               <Block row space="between">
                 <Block row>
-                  <Text color="white" size={16} muted style={styles.seller}>user@gmail.com</Text>
+                  <Text color="white" size={16} muted style={styles.seller}>{this.state.email}</Text>
                 </Block>
                 <Block>
                   <Text color={theme.COLORS.MUTED} size={16}>
                     <Icon name="map-marker" family="font-awesome" color={theme.COLORS.MUTED} size={16} />
-                    {`  `} Los Angeles, CA
+                    {`  `} {this.state.address}
                   </Text>
                 </Block>
               </Block>
@@ -144,6 +163,10 @@ class Settings extends React.Component {
                     viewPass
                     placeholder="Password"
                     iconColor="white"
+                    // style={[styles.input, this.state.active.password ? styles.inputActive : null]}
+                    onChangeText={text => this.handleChange('password', text)}
+                    // onBlur={() => this.toggleActive('password')}
+                    // onFocus={() => this.toggleActive('password')}
                   />
                 </Block>
               </Block>
@@ -154,8 +177,12 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value="Rachel Brown"
+                    value={this.state.fullName}
                     autoCapitalize="none"
+                    // style={[styles.input, this.state.active.fullName ? styles.inputActive : null]}
+                    onChangeText={text => this.handleChange('fullName', text)}
+                    // onBlur={() => this.toggleActive('fullName')}
+                    // onFocus={() => this.toggleActive('fullName')}
                   />
                 </Block>
               </Block>
@@ -172,8 +199,12 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value=""
+                    value={this.state.miles}
                     autoCapitalize="none"
+                    // style={[styles.input, this.state.active.miles ? styles.inputActive : null]}
+                    onChangeText={text => this.handleChange('miles', text)}
+                    // onBlur={() => this.toggleActive('miles')}
+                    // onFocus={() => this.toggleActive('miles')}
                   />
                   {this.state.pickerHeight > 0 && <Picker    
                                                                             
@@ -196,8 +227,12 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value="Los Angeles, CA"
+                    value={this.state.address}
                     autoCapitalize="none"
+                    // style={[styles.input, this.state.active.address ? styles.inputActive : null]}
+                    onChangeText={text => this.handleChange('address', text)}
+                    // onBlur={() => this.toggleActive('address')}
+                    // onFocus={() => this.toggleActive('address')}
                   />
                 </Block>
               </Block>
@@ -321,10 +356,12 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getProfileData: (data) => dispatch(profileApiCall(data)),
   callUpdateProfile: (data) => dispatch(callUpdateProfile(data)),
 })
 
 const mapStateToProps = (state) => ({
+  profileData: state.profileData,
   // videos: state.video,
   // getVideoData: videoSelector
 })

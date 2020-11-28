@@ -31,7 +31,7 @@ export const updateProfile = (url, data) => {
         "password": data.password
     }
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     };
