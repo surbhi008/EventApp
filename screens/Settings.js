@@ -56,28 +56,25 @@ class Settings extends React.Component {
   handleUpdateProfile () {
     const { navigation } = this.props;
     const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state
-    if (password) {
+    if (!password) {
       Alert.alert("Please provide Password.")
       return
     }  else if (!(validatePassword(password))) {
       Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
       return
-    } else if (fullName) {
+    } else if (!fullName) {
       Alert.alert("Please provide Full Name.")
       return
-    } else if (miles) {
+    } else if (!miles) {
       Alert.alert("Please provide Miles.")
       return
-    } else if (address) {
+    } else if (!address) {
       Alert.alert("Please provide Address.")
       return
-    } else if (locationLatLong) {
+    } else if (!locationLatLong) {
       Alert.alert("Please select Location.")
       return
-    } else if (imageURL) {
-      Alert.alert("Please upload Profile Image.")
-      return
-    }
+    } 
 
     // password.length === 0
     const request = {
@@ -137,7 +134,7 @@ class Settings extends React.Component {
           imageStyle={styles.profileImage}>
           <Block flex style={styles.profileDetails}>
             <Block style={styles.profileTexts}>
-              <Text color="white" size={28} style={{ paddingBottom: 8 }}>{this.state.fullName}</Text>
+              <Text color="white" size={28} style={{ paddingBottom: 8 }}>{this.props.profileData && this.props.profileData.userDetail.fullName}</Text>
               <Block row space="between">
                 <Block row>
                   <Text color="white" size={16} muted style={styles.seller}>{this.state.email}</Text>
@@ -145,7 +142,7 @@ class Settings extends React.Component {
                 <Block>
                   <Text color={theme.COLORS.MUTED} size={16}>
                     <Icon name="map-marker" family="font-awesome" color={theme.COLORS.MUTED} size={16} />
-                    {`  `} {this.state.address}
+                    {`  `} {this.props.profileData && this.props.profileData.userDetail.address}
                   </Text>
                 </Block>
               </Block>
@@ -211,8 +208,8 @@ class Settings extends React.Component {
                   />
                   {this.state.pickerHeight > 0 && <Picker    
                                                                             
-                    selectedValue={"50 mile"}
-                    // onValueChange={}
+                    selectedValue={miles}
+                    onValueChange={(text) => this.handleChange('miles', text)}
                     style={{height: this.state.pickerHeight, bottom: 0, left: 0, right: 0 }}
                     >
                     <Picker.Item label="5 mile" value="5" />
@@ -365,8 +362,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   profileData: state.profileData,
-  // videos: state.video,
-  // getVideoData: videoSelector
+  isLoading: state.isLoading,
 })
 
 const container = compose(

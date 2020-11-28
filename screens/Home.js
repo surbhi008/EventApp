@@ -136,6 +136,7 @@ const mapDispatchToProps = () => ({
 
 const mapStateToProps = (state) => ({
   authData: state.authData,
+  isLoading: state.isLoading,
 })
 
 const container = compose(

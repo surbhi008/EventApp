@@ -24,7 +24,7 @@ class Profile extends React.Component {
   componentDidMount() {
     console.log("profileData",this.props.profileData)
     this.setState({
-      userName: this.props.profileData && this.props.profileData.userDetail.userName,
+      userName: this.props.profileData && this.props.profileData.userDetail.fullName,
       email: this.props.profileData && this.props.profileData.userDetail.email
     })
   }
@@ -46,9 +46,9 @@ class Profile extends React.Component {
             <Block style={styles.profileTexts}>
               <Text color="white" size={28} style={{ paddingBottom: 8 }}>{this.state.userName}</Text>
               <Block row space="between">
-                <Block row>
+                {/* <Block row>
                   <Text color="white" size={16} muted style={styles.seller}>{this.state.email}</Text>
-                </Block>
+                </Block> */}
                 <Block>
                   <Text color={theme.COLORS.MUTED} size={16}>
                     <Icon name="map-marker" family="font-awesome" color={theme.COLORS.MUTED} size={16} />
@@ -59,7 +59,7 @@ class Profile extends React.Component {
               <Block row space="between">
                   <Block row>
                     <Text color={theme.COLORS.MUTED} size={16}>
-                      Followers 10
+                      Followers (10)
                     </Text>
                   </Block>
               </Block>
