@@ -792,7 +792,7 @@ function dashboardStack (props) {
           },  
         style: {
           backgroundColor: "black",
-          height: 50,
+          height: "8%",
       }}}>
         <Tab.Screen
           name="HomeStack"
