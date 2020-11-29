@@ -4,7 +4,7 @@ import { Block, Text, theme, Button, Input } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { compose } from "recompose"
-import { callUpdateProfile } from '../actions';
+import { callUpdateProfile, profileApiCall } from '../actions';
 import { connect } from 'react-redux'
 import withLoadingScreen from '../HOC/spinner';
 
@@ -23,30 +23,29 @@ class Settings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { pickerHeight: 0 };
-  }
-
-  state = {
-    userId: '',
-    userName: '',
-    fullName: '',
-    email: '',
-    imageURL: '',
-    miles: '',
-    address: '',
-    locationLatLong: '',
-    password: '',
-    active: {
-      userId: false,
-      userName: false,
-      fullName: false,
-      email: false,
-      imageURL: false,
-      miles: false,
-      address: false,
-      locationLatLong: false,
-      password: false,
-    }
+    this.state = { 
+      pickerHeight: 0,
+      userId: this.props.profileData && this.props.profileData.userDetail.userId,
+      userName: this.props.profileData && this.props.profileData.userDetail.userName,
+      fullName: this.props.profileData && this.props.profileData.userDetail.fullName,
+      email: this.props.profileData && this.props.profileData.userDetail.email,
+      imageURL: this.props.profileData && this.props.profileData.userDetail.imageURL,
+      miles: this.props.profileData && this.props.profileData.userDetail.miles,
+      address: this.props.profileData && this.props.profileData.userDetail.address,
+      locationLatLong: this.props.profileData && this.props.profileData.userDetail.locationLatLong,
+      // password: this.props.profileData && this.props.profileData.userDetail.password,
+      password: "Admin@123" ,
+      active: {
+        userId: false,
+        userName: false,
+        fullName: false,
+        email: false,
+        imageURL: false,
+        miles: false,
+        address: false,
+        locationLatLong: false,
+        password: false,
+      }};
   }
 
   handleChange = (name, value) => {
@@ -54,7 +53,6 @@ class Settings extends React.Component {
   }
 
   handleUpdateProfile () {
-    const { navigation } = this.props;
     const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state
     if (!password) {
       Alert.alert("Please provide Password.")
@@ -91,8 +89,8 @@ class Settings extends React.Component {
       callback: (response) => {
         if (response.success) {   
           Alert.alert("Profile Updated Successfully.")
-          // const popAction = StackActions.pop(1);
-          // navigation.dispatch(popAction);
+          this.props.getProfileData()
+          this.setState({})
         } else {
           Alert.alert(response.message)
         }     
@@ -103,17 +101,6 @@ class Settings extends React.Component {
 
   componentDidMount() {
     console.log("profileData",this.props.profileData)
-    this.setState({
-      userId: this.props.profileData && this.props.profileData.userDetail.userId,
-      userName: this.props.profileData && this.props.profileData.userDetail.userName,
-      fullName: this.props.profileData && this.props.profileData.userDetail.fullName,
-      email: this.props.profileData && this.props.profileData.userDetail.email,
-      imageURL: this.props.profileData && this.props.profileData.userDetail.imageURL,
-      miles: this.props.profileData && this.props.profileData.userDetail.miles,
-      address: this.props.profileData && this.props.profileData.userDetail.address,
-      locationLatLong: this.props.profileData && this.props.profileData.userDetail.locationLatLong,
-      password: this.props.profileData && this.props.profileData.userDetail.password,
-    })
   }
 
   render() {
@@ -161,6 +148,7 @@ class Settings extends React.Component {
                     color="black"
                     password
                     viewPass
+                    value={"Admin@123"}
                     placeholder="Password"
                     iconColor="white"
                     // style={[styles.input, this.state.active.password ? styles.inputActive : null]}
@@ -177,7 +165,7 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value={this.state.fullName}
+                    value={fullName}
                     autoCapitalize="none"
                     // style={[styles.input, this.state.active.fullName ? styles.inputActive : null]}
                     onChangeText={text => this.handleChange('fullName', text)}
@@ -199,7 +187,7 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value={this.state.miles}
+                    value={miles}
                     autoCapitalize="none"
                     // style={[styles.input, this.state.active.miles ? styles.inputActive : null]}
                     onChangeText={text => this.handleChange('miles', text)}
@@ -227,7 +215,7 @@ class Settings extends React.Component {
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                     color="black"
-                    value={this.state.address}
+                    value={address}
                     autoCapitalize="none"
                     // style={[styles.input, this.state.active.address ? styles.inputActive : null]}
                     onChangeText={text => this.handleChange('address', text)}

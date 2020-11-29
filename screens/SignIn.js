@@ -16,8 +16,8 @@ const { width } = Dimensions.get('window');
 
 class SignIn extends React.Component {
   state = {
-    email: "",
-    password: "",
+    email: "admin",
+    password: "Admin@123",
     active: {
       email: false,
       password: false,
@@ -132,6 +132,7 @@ class SignIn extends React.Component {
                   placeholder="Username"
                   autoCapitalize="none"
                   bgColor='transparent'
+                  value={email}
                   onBlur={() => this.toggleActive('email')}
                   onFocus={() => this.toggleActive('email')}
                   placeholderTextColor={theme.COLORS.MUTED}
@@ -146,6 +147,7 @@ class SignIn extends React.Component {
                   iconColor="white"
                   placeholder="Password"
                   bgColor='transparent'
+                  value={password}
                   onBlur={() => this.toggleActive('password')}
                   onFocus={() => this.toggleActive('password')}
                   placeholderTextColor={theme.COLORS.MUTED}
