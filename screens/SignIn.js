@@ -41,7 +41,7 @@ class SignIn extends React.Component {
     } = this.state
     const { navigation } = this.props;
     if (email.length === 0 || password.length === 0) {
-      Alert.alert("Please provide user and password")
+      Alert.alert("Please provide email and password")
       return
     }
     const request = {
@@ -129,7 +129,7 @@ class SignIn extends React.Component {
                 <Input
                   borderless
                   color="white"
-                  placeholder="Username"
+                  placeholder="Email"
                   autoCapitalize="none"
                   bgColor='transparent'
                   value={email}

@@ -46,6 +46,7 @@ import CustomDrawerContent from "./Menu";
 import { tabs } from "../constants/";
 import Events from "../screens/Events";
 import Logout from "../screens/Logout";
+import Home from "../screens/Home";
 
 const { width } = Dimensions.get("screen");
 
@@ -259,7 +260,7 @@ function AboutUsStack(props) {
 }
 function HostEventStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator mode="card" headerMode="none">
       <Stack.Screen
         name="HostEvent"
         component={HostEventScreen}
@@ -280,7 +281,7 @@ function HostEventStack(props) {
 
 function EventsNearMeStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator mode="card" headerMode="non">
       <Stack.Screen
         name="EventsNearMe"
         component={EventsNearMeScreen}
@@ -567,9 +568,9 @@ function AppStack(props) {
   return (
     <Drawer.Navigator
       style={{ flex: 1 }}
-      drawerContent={props => (
-        <CustomDrawerContent {...props} profile={profile} />
-      )}
+      // drawerContent={props => (
+      //   // <CustomDrawerContent {...props} profile={profile} />
+      // )}
       drawerStyle={{
         backgroundColor: "white",
         width: width * 0.8
@@ -597,20 +598,20 @@ function AppStack(props) {
     >
       <Drawer.Screen
         name="Home"
-        component={HomeStack}
+        component={dashboardStack}
         options={{
           drawerIcon: ({ focused }) => (
             <Icon
               size={16}
               name="shop"
               family="GalioExtra"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? "white" : materialTheme.COLORS.MUTED}
             />
           )
         }}
       />
       <Drawer.Screen
-        name="Host Event"
+        name="Add Event"
         component={HostEventStack}
         options={{
           drawerIcon: ({ focused }) => (
@@ -624,7 +625,7 @@ function AppStack(props) {
         }}
       />
       <Drawer.Screen
-        name="Events Near Me"
+        name="Recent Events"
         component={EventsNearMeStack}
         options={{
           drawerIcon: ({ focused }) => (
@@ -637,7 +638,7 @@ function AppStack(props) {
           )
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Profile"
         component={ProfileStack}
         options={{
@@ -646,7 +647,7 @@ function AppStack(props) {
               size={16}
               name="circle-10"
               family="GalioExtra"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
@@ -660,7 +661,7 @@ function AppStack(props) {
               size={16}
               name="circle-10"
               family="GalioExtra"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
@@ -674,7 +675,7 @@ function AppStack(props) {
               size={16}
               name="gears"
               family="font-awesome"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
               style={{ marginRight: -3 }}
             />
           )
@@ -689,7 +690,7 @@ function AppStack(props) {
               size={16}
               name="md-person-add"
               family="ionicon"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
@@ -703,7 +704,7 @@ function AppStack(props) {
               size={16}
               name="md-person-add"
               family="ionicon"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
@@ -717,7 +718,7 @@ function AppStack(props) {
               size={16}
               name="md-person-add"
               family="ionicon"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
@@ -731,18 +732,18 @@ function AppStack(props) {
               size={16}
               name="md-person-add"
               family="ionicon"
-              color={focused ? "black" : materialTheme.COLORS.MUTED}
+              color={focused ? materialTheme.COLORS.LABEL : materialTheme.COLORS.MUTED}
             />
           )
         }}
-      />   
+      />    */}
     </Drawer.Navigator>
   );
 }
 
 export default function OnboardingStack() {
   return (
-    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="none">
+    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="screen">
     <Stack.Screen
         name="SIGN IN"
         component={SignInScreen}
@@ -765,14 +766,16 @@ export default function OnboardingStack() {
       />
       <Stack.Screen
         name="Home"
-        component={dashboardStack}
-        // options={{
-        //   // header: ({ navigation, scene }) => (
-        //   //   <Text size={theme.SIZES.FONT} navigation={navigation} scene={scene} style={{lineHeight: 60, height: 60, backgroundColor: "#F4BD74", marginTop: 22, fontSize: 20, textAlign: "center"}}>
-        //   //     SIGN IN
-        //   //   </Text>
-        //   // )
-        // }}
+        component={AppStack}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title=""
+              navigation={navigation}
+              scene={scene}
+            />
+          )
+        }}
       />     
   </Stack.Navigator>
   )
@@ -796,7 +799,7 @@ function dashboardStack (props) {
       }}}>
         <Tab.Screen
           name="HomeStack"
-          component={Events}
+          component={Home}
           options={{            
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (

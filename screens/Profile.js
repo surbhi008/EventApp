@@ -36,7 +36,7 @@ class Profile extends React.Component {
         end={{ x: 0.25, y: 1.1 }}
         locations={[0.2, 1]}
         colors={['#000000', '#000000']}
-        style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>
+        style={[styles.signin, {flex: 1, paddingTop: 10}]}>
       <Block flex style={styles.profile}>
         <ImageBackground
           source={{ uri: Images.Profile }}
@@ -100,7 +100,7 @@ class Profile extends React.Component {
 
 const styles = StyleSheet.create({
   profile: {
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0,
+    marginTop: 0,
   },
   profileImage: {
     width: width * 1.1,
