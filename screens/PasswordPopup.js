@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Modal, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
-export default function PasswordPopup(props) {
-  const [modalVisible, setModalVisible] = useState(props.visible);
+export function PasswordPopup({visible, setModalVisible}) {
+
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={visible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
@@ -19,7 +19,7 @@ export default function PasswordPopup(props) {
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
               onPress={() => {
-                setModalVisible(!modalVisible);
+                setModalVisible()
               }}>
               <Text style={styles.textStyle}>Change Password</Text>
             </TouchableHighlight>

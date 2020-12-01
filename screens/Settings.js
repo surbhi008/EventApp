@@ -15,7 +15,7 @@ import RNF_ImagePicker from '../components/RNF_ImagePicker';
 import MapView from 'react-native-maps';
 import { Picker } from 'react-native';
 import { Keyboard } from 'react-native'
-import PasswordPopup from './PasswordPopup';
+import {PasswordPopup} from './PasswordPopup';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -267,7 +267,9 @@ class Settings extends React.Component {
         </Block>
       </Block>
 
-      <PasswordPopup visible={this.state.visiblePasswordModel}></PasswordPopup>
+      <PasswordPopup 
+      setModalVisible={()=>this.setState({visiblePasswordModel:false})}
+      visible={this.state.visiblePasswordModel}></PasswordPopup>
 
             </ScrollView>
       </LinearGradient>
