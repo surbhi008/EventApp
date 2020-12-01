@@ -15,6 +15,7 @@ import RNF_ImagePicker from '../components/RNF_ImagePicker';
 import MapView from 'react-native-maps';
 import { Picker } from 'react-native';
 import { Keyboard } from 'react-native'
+import PasswordPopup from './PasswordPopup';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -35,6 +36,8 @@ class Settings extends React.Component {
       locationLatLong: this.props.profileData && this.props.profileData.userDetail.locationLatLong,
       // password: this.props.profileData && this.props.profileData.userDetail.password,
       password: "Admin@123" ,
+
+      visiblePasswordModel: false,
       active: {
         userId: false,
         userName: false,
@@ -154,7 +157,12 @@ class Settings extends React.Component {
                     // style={[styles.input, this.state.active.password ? styles.inputActive : null]}
                     onChangeText={text => this.handleChange('password', text)}
                     // onBlur={() => this.toggleActive('password')}
-                    // onFocus={() => this.toggleActive('password')}
+                    onFocus={() => 
+                      {
+                        console.log('{onFocus}')
+                        this.setState({visiblePasswordModel: true})
+                      }
+                    }
                   />
                 </Block>
               </Block>
@@ -229,7 +237,9 @@ class Settings extends React.Component {
                   <Button                   
                   shadowless
                   style={styles.addToCart}
-                  color={materialTheme.COLORS.INFO}>Change Location</Button>
+                  color={materialTheme.COLORS.INFO}
+                  onPress={() => this.setState({visiblePasswordModel: true})}>Change Location
+                  </Button>
                   <MapView style={styles.mapStyle} />
                 </Block>
               </Block>
@@ -256,6 +266,9 @@ class Settings extends React.Component {
           </Block>
         </Block>
       </Block>
+
+      <PasswordPopup visible={this.state.visiblePasswordModel}></PasswordPopup>
+
             </ScrollView>
       </LinearGradient>
     );
