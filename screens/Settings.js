@@ -237,9 +237,7 @@ class Settings extends React.Component {
                   <Button                   
                   shadowless
                   style={styles.addToCart}
-                  color={materialTheme.COLORS.INFO}
-                  onPress={() => this.setState({visiblePasswordModel: true})}>Change Location
-                  </Button>
+                  color={materialTheme.COLORS.INFO}>Change Location</Button>
                   <MapView style={styles.mapStyle} />
                 </Block>
               </Block>
