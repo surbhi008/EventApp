@@ -51,7 +51,7 @@ export default class SignIn extends React.Component {
               <Block center>
                 <Input
                   borderless
-                  color="black"
+                  color="white"
                   placeholder="Email"
                   type="email-address"
                   autoCapitalize="none"
@@ -68,7 +68,7 @@ export default class SignIn extends React.Component {
                   shadowless
                   color={materialTheme.COLORS.BUTTON_COLOR}
                   style={{ height: 48 }}
-                  onPress={() => navigation.navigate("Sign In")}
+                  onPress={() => navigation.navigate("SIGN IN")}
                 >
                   {/* Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,) */}
                   <Text
@@ -82,6 +82,7 @@ export default class SignIn extends React.Component {
                     size={theme.SIZES.FONT * 0.75}
                     style={{marginTop:20}}
                   >
+                    {"Don't have an account? Sign Up"}
                   </Text>
                 </Button>
               </Block>

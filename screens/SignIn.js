@@ -75,7 +75,7 @@ class SignIn extends React.Component {
           <KeyboardAvoidingView behavior="padding" enabled>
             <Block middle>
               <Block row center space="between" style={{ marginVertical: theme.SIZES.BASE * 0.1 }}>
-                <Block flex middle right>
+                {/* <Block flex middle right>
                   <Button
                     round
                     onlyIcon
@@ -116,7 +116,7 @@ class SignIn extends React.Component {
                     style={styles.social}
                     onPress={() => Alert.alert('Not implemented')}
                   />
-                </Block>
+                </Block> */}
               </Block>
             </Block>
             <Block middle style={{ paddingVertical: theme.SIZES.BASE * 2.625}}>
@@ -189,6 +189,16 @@ class SignIn extends React.Component {
                     style={{marginTop:20}}
                   >
                     {"Don't have an account? Sign Up"}
+                  </Text>
+                </Button>
+                <Button color="transparent" shadowless onPress={() => navigation.navigate('FORGOT PASSWORD')}>
+                  <Text
+                    center
+                    color={theme.COLORS.WHITE}
+                    size={theme.SIZES.FONT}
+                    style={{marginTop:20}}
+                  >
+                    {"Forgot Password?"}
                   </Text>
                 </Button>
               </Block>

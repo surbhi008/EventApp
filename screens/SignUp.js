@@ -94,7 +94,7 @@ class SignUp extends React.Component {
           <KeyboardAvoidingView behavior="padding" enabled>
             <Block style={{ marginBottom: height * 0.05 }}>
               <Block row center space="between" style={{ marginVertical: theme.SIZES.BASE * 1.875 }}>
-                <Block flex middle right>
+                {/* <Block flex middle right>
                   <Button
                     round
                     onlyIcon
@@ -135,7 +135,7 @@ class SignUp extends React.Component {
                     iconColor={theme.COLORS.WHITE}
                     style={styles.social}
                   />
-                </Block>
+                </Block> */}
               </Block>
               <Text color='#fff' center size={theme.SIZES.FONT * 0.875}>
                 {/* or be classical */}

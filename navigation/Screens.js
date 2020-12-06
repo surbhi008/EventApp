@@ -776,6 +776,19 @@ export default function OnboardingStack() {
             />
           )
         }}
+      />
+      <Stack.Screen
+        name="FORGOT PASSWORD"
+        component={ForgotPasswordScreen}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title=""
+              navigation={navigation}
+              scene={scene}
+            />
+          )
+        }}
       />     
   </Stack.Navigator>
   )
