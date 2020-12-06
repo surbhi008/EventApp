@@ -159,7 +159,7 @@ class Settings extends React.Component {
                     // onBlur={() => this.toggleActive('password')}
                     onFocus={() => 
                       {
-                        console.log('{onFocus}')
+                        Keyboard.dismiss()
                         this.setState({visiblePasswordModel: true})
                       }
                     }

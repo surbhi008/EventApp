@@ -5,10 +5,88 @@ import { Block, Button, Input, Text, theme } from 'galio-framework';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme, utils } from '../constants/';
+import { HeaderHeight, validatePassword } from "../constants/utils";
+import { compose } from "recompose"
+import { callUpdateProfile, profileApiCall } from '../actions';
+import { connect } from 'react-redux'
+import withLoadingScreen from '../HOC/spinner';
+// import { StackActions } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get('window');
 
 export function PasswordPopup({visible, setModalVisible}) {
+
+  state = {
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+    active: {
+      oldPassword: false,
+      newPassword: false,
+      confirmNewPassword: false,
+    }
+  }
+
+  handleChange = (name, value) => {
+    this.setState({ [name]: value });
+  }
+
+  toggleActive = (name) => {
+    const { active } = this.state;
+    active[name] = !active[name];
+
+    this.setState({ active });
+  }
+
+  // handleUpdatePasswordProfile () {
+  //   const {oldPassword, newPassword, confirmNewPassword} = this.state
+  //   if (!oldPassword) {
+  //     Alert.alert("Please provide Old Password.")
+  //     return
+  //   } else if (oldPassword !== this.profileData.password) {
+  //     Alert.alert("Please provide Correct Old Password.")
+  //     return
+  //   } else if (newPassword) {
+  //     Alert.alert("Please provide New Password.")
+  //     return
+  //   } else if (confirmNewPassword) {
+  //     Alert.alert("Please provide Confirm Password.")
+  //     return
+  //   } else if (!(validatePassword(newPassword))) {
+  //     Alert.alert("New Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+  //     return
+  //   } else if (newPassword !== confirmNewPassword) {
+  //     Alert.alert("New Password & Confirm Password doesn't Match.")
+  //     return
+  //   } else if (!locationLatLong) {
+  //     Alert.alert("Please select Location.")
+  //     return
+  //   } 
+
+  //   // password.length === 0
+  //   const request = {
+  //     userId: this.profileData.userId,
+  //     userName: this.profileData.userName,
+  //     fullName: this.profileData.fullName,
+  //     email: this.profileData.email,
+  //     imageURL: this.profileData.imageURL,
+  //     miles: this.profileData.miles,
+  //     address: this.profileData.address,
+  //     locationLatLong: this.profileData.locationLatLong,
+  //     password: newPassword,
+
+  //     callback: (response) => {
+  //       if (response.success) {   
+  //         Alert.alert("Profile Updated Successfully.")
+  //         setModalVisible()
+  //       } else {
+  //         Alert.alert(response.message)
+  //       }     
+  //     }
+  //   }
+  //   this.props.callUpdateProfile(request)
+  // }
+
   
   return (
     <View style={styles.centeredView}>
@@ -86,7 +164,8 @@ export function PasswordPopup({visible, setModalVisible}) {
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
               onPress={() => {
-                setModalVisible()
+                // this.handleUpdatePasswordProfile()
+                setModalVisible()                
               }}>
               <Text style={styles.textStyle}>Change Password</Text>
             </TouchableHighlight>
@@ -165,3 +244,24 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  getProfileData: (data) => dispatch(profileApiCall(data)),
+  callUpdateProfile: (data) => dispatch(callUpdateProfile(data)),
+})
+
+const mapStateToProps = (state) => ({
+  profileData: state.profileData,
+  isLoading: state.isLoading,
+  // getVideoData: videoSelector
+})
+
+const container = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withLoadingScreen
+)
+
+export default compose(container)(PasswordPopup)
