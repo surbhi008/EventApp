@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform, Image,ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, KeyboardAvoidingView, ImageBackground, Platform, Image,ScrollView } from 'react-native';
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 import RNC_DTPicker from '../components/RNC_DTPicker';
 import RNF_ImagePicker from '../components/RNF_ImagePicker';
@@ -37,26 +37,32 @@ export default class HostEvent extends React.Component {
     const { email, password } = this.state;
 
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: "black", padding: 10}}>        
       <LinearGradient
         start={{ x: 0, y: 0 }}
         end={{ x: 0.25, y: 1.1 }}
         locations={[0.2, 1]}
-        colors={['#000000', '#000000']}
-        style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>
+        colors={['#ffffff', '#ffffff']}
+        style={[styles.signin, {flex: 1}]}>
         <Block flex middle>
           <KeyboardAvoidingView behavior="padding" enabled>
-            <Block flex style={{ paddingVertical: theme.SIZES.BASE * 2.625}}>
-              <Block center>
-                <Image source={{ uri: "https://images.unsplash.com/photo-1543321269-9d86d3680e1c?crop=entropy&w=840&h=840&fit=crop" }} style={styles.eventimage} />
+            <Block flex >
+              <Block center>              
+                <ImageBackground
+                  source={{ uri: "https://images.unsplash.com/photo-1543321269-9d86d3680e1c?crop=entropy&w=840&h=840&fit=crop" }}
+                  style={styles.profileContainer}
+                  imageStyle={styles.profileImage}>
+                </ImageBackground>
+                <Block style={{width: width * 0.9, marginBottom : 8, marginTop: 16}}>
                 <RNF_ImagePicker></RNF_ImagePicker>
+                </Block>                
                 <Input
                   borderless
                   color="black"
                   placeholder="Give your event a title"
                   type="event-name"
                   autoCapitalize="none"
-                  bgColor='#FCEFDB'
+                  bgColor='white'
                   onBlur={() => this.toggleActive('eventname')}
                   onFocus={() => this.toggleActive('eventname')}
                   placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
@@ -65,11 +71,11 @@ export default class HostEvent extends React.Component {
                 />
                 <Input
                   borderless
-                  color="white"
+                  color="black"
                   placeholder="Describe your event"
                   type="event-description"
                   autoCapitalize="none"
-                  bgColor='#FCEFDB'
+                  bgColor='white'
                   onBlur={() => this.toggleActive('eventdescription')}
                   onFocus={() => this.toggleActive('eventdescription')}
                   placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
@@ -78,25 +84,27 @@ export default class HostEvent extends React.Component {
                 />
                 <Input
                   borderless
-                  color="white"
+                  color="black"
                   placeholder="Event From MM/dd/yyyy"
                   type="datetime"
                   autoCapitalize="none"
-                  bgColor='#FCEFDB'
+                  bgColor='white'
                   onBlur={() => this.toggleActive('eventfromdate')}
                   onFocus={() => this.toggleActive('eventfromdate')}
                   placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                   onChangeText={text => this.handleChange('eventfromdate', text)}
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
                 />
+                <Block style={{width: width * 0.9, marginBottom : 8, marginTop: 16}}>
                 <RNC_DTPicker></RNC_DTPicker>
+                </Block>                
                 <Input
                   borderless
-                  color="white"
+                  color="black"
                   placeholder="Event To MM/dd/yyyy"
                   type="datetime"
                   autoCapitalize="none"
-                  bgColor='#FCEFDB'
+                  bgColor='white'
                   onBlur={() => this.toggleActive('eventtodate')}
                   onFocus={() => this.toggleActive('eventtodate')}
                   placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
@@ -104,20 +112,21 @@ export default class HostEvent extends React.Component {
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
                 />
                 <RNC_DTPicker></RNC_DTPicker>
-                <Button color={materialTheme.COLORS.INFO} style={{marginTop:12}}>Pick Event Location</Button>
+                <Button shadowless color={materialTheme.COLORS.INFO} style={{marginTop:12}}> 
+                <Text size={16} bold color={theme.COLORS.BLACK}>Pick Event Location</Text></Button>
                 <MapView style={styles.mapStyle} />
               </Block>
-              <Block flex top style={{ marginTop: 50 }}>
+              <Block flex top style={{ marginTop: 16, width: "100%", alignItems: "center", marginBottom: 50 }}>
                 <Button
                   shadowless
-                  color={materialTheme.COLORS.BUTTON_COLOR}
+                  color={materialTheme.COLORS.INFO}
                   style={{ height: 48 }}
                   onPress={() => navigation.navigate("Events Near Me")}
                 >
                   {/* Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,) */}
-                  <Text color={theme.COLORS.BLACK}>Create A Event</Text>
+                  <Text size={16} bold color={theme.COLORS.BLACK}>Create A Event</Text>
                 </Button>
-                <Button color="transparent" shadowless onPress={() => navigation.navigate('Sign Up')}>
+                {/* <Button shadowless onPress={() => navigation.navigate('Sign Up')}>
                   <Text
                     center
                     color={theme.COLORS.WHITE}
@@ -125,7 +134,7 @@ export default class HostEvent extends React.Component {
                     style={{marginTop:20}}
                   >
                   </Text>
-                </Button>
+                </Button> */}
               </Block>
             </Block>
           </KeyboardAvoidingView>
@@ -137,8 +146,9 @@ export default class HostEvent extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  signin: {        
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0,
+  signin: {       
+    borderRadius: 10, 
+    marginTop: 44,
   },
   eventimage: {
     width: 200,
@@ -149,21 +159,33 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     borderBottomWidth: 1,
     borderBottomColor: materialTheme.COLORS.PLACEHOLDER,
+    borderRadius: 5
   },
   inputMultiline: {
     height:100,
     width: width * 0.9, 
     borderRadius: 0,
     borderBottomWidth: 1,
+    borderRadius: 5,
     borderBottomColor: materialTheme.COLORS.PLACEHOLDER,
   },
   inputActive: {
     borderBottomColor: "white",
+    borderRadius: 5
   },
   mapStyle: {
-    width: 400,
+    width: width * 0.9,
     height:200,
-    marginTop:12
+    marginTop:16,
+    borderRadius: 5
+  },
+  profileContainer: {
+    width: width,
+    height: 200
+  },
+  profileImage: {
+    width: width * 1.1,
+    flex: 1
   },
 });
 function showImagePicker() {

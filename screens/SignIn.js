@@ -36,6 +36,7 @@ class SignIn extends React.Component {
   }
 
   handleLogin () {
+    
     const {
       email, password
     } = this.state
@@ -57,6 +58,9 @@ class SignIn extends React.Component {
         }     
       }
     }
+    // navigation.dispatch(
+    //   StackActions.replace('Home', {
+    // }));
     this.props.callLogin(request)
   }
 

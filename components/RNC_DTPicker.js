@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default class RNC_DTPicker extends Component {
     state={
-        date: new Date(),
+        date: new Date(1598051730000),
         mode:'date',
         show:false
     }
@@ -33,7 +33,6 @@ export default class RNC_DTPicker extends Component {
             <View>
                 <View>
                     <Button onPress={this.datepicker} title="select event date">
-
                     </Button>
                 </View>
                 {/* <View>
@@ -42,12 +41,13 @@ export default class RNC_DTPicker extends Component {
                     </Button>
                 </View> */}
                 {
-                    show && <DateTimePicker value={date}
+                    show && (<DateTimePicker                     
                         mode={mode}
                         is24Hour={true}
                         display='default'
-                        onChange={this.setDate}
-                    ></DateTimePicker>
+                        onChange={()=>this.setDate}
+                        value={date}
+                    ></DateTimePicker>)
                 }
             </View>
         )                    

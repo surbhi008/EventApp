@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import { Image, View, Platform, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
+import { materialTheme } from '../constants';
+import { Button, Text, theme } from 'galio-framework';
+const { width } = Dimensions.get('window');
 
 export default function RNF_ImagePicker() {
   const [image, setImage] = useState(null);
@@ -33,8 +35,15 @@ export default function RNF_ImagePicker() {
   };
 
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+    <View style={{
+      flex:1,
+      height: 44, 
+      borderRadius: 5,
+      alignItems: 'center', justifyContent: 'center', backgroundColor: materialTheme.COLORS.INFO, 
+ }}>
+   <Button style={{width: width - theme.SIZES.BASE * 4}} shadowless color={materialTheme.COLORS.INFO} onPress={pickImage} > 
+      <Text size={16} bold color={theme.COLORS.BLACK}>Pick an image from camera roll</Text>
+    </Button>
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
     </View>
   );

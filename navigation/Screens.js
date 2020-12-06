@@ -743,7 +743,7 @@ function AppStack(props) {
 
 export default function OnboardingStack() {
   return (
-    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="screen">
+    <Stack.Navigator initialRouteName="SIGN IN" mode="card" headerMode="none">
     <Stack.Screen
         name="SIGN IN"
         component={SignInScreen}
@@ -766,7 +766,7 @@ export default function OnboardingStack() {
       />
       <Stack.Screen
         name="Home"
-        component={AppStack}
+        component={dashboardStack}
         options={{
           header: ({ navigation, scene }) => (
             <Header
@@ -812,7 +812,7 @@ function dashboardStack (props) {
       }}}>
         <Tab.Screen
           name="HomeStack"
-          component={Home}
+          component={Events}
           options={{            
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
@@ -845,14 +845,14 @@ function dashboardStack (props) {
           }}
         />
         <Tab.Screen
-          name="Events Near Me"
-          component={Events}
+          name="Add Event"
+          component={HostEventScreen}
           options={{
             labelStyle:{
               color: "white", 
               numberOfLines:2
             },
-            tabBarLabel: 'Events Near',
+            tabBarLabel: 'Add Event',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="calendar-account" color={color} size={size} />
             ),

@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     marginBottom: 24,
-    marginTop: 10,
+    marginTop: 44,
     elevation: 4,
   },
   tab: {

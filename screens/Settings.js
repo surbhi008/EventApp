@@ -225,26 +225,30 @@ class Settings extends React.Component {
                     color="black"
                     value={address}
                     autoCapitalize="none"
-                    // style={[styles.input, this.state.active.address ? styles.inputActive : null]}
                     onChangeText={text => this.handleChange('address', text)}
-                    // onBlur={() => this.toggleActive('address')}
-                    // onFocus={() => this.toggleActive('address')}
                   />
                 </Block>
               </Block>
               <Block row space="between">
                 <Block flex={1}>
-                  <Button                   
+                  <Button            
                   shadowless
                   style={styles.addToCart}
-                  color={materialTheme.COLORS.INFO}>Change Location</Button>
+                  color={materialTheme.COLORS.INFO}>
+                    <Text
+                    size={16} bold
+                    color={theme.COLORS.BLACK} 
+                    size={theme.SIZES.FONT}>Change Location</Text>
+                  </Button>
                   <MapView style={styles.mapStyle} />
                 </Block>
               </Block>
-              <Block row space="between">
-                <Block flex={1}>
-                  <Text bold size={14}>Upload Image</Text>
-                  <RNF_ImagePicker></RNF_ImagePicker>
+              <Block row space="between" style={{alignItems: "center"}}>
+                <Block style={{alignItems: "center", flex: 1}}>
+                  <Text style={{marginBottom: 10}} bold size={14}>Upload Image</Text>
+                  <Block style={{width: width * 0.8}}>
+                    <RNF_ImagePicker></RNF_ImagePicker>
+                  </Block> 
                 </Block>
               </Block>
               <Block row space="between">
@@ -252,10 +256,11 @@ class Settings extends React.Component {
                 <Button
                   shadowless
                   style={styles.addToCart}
-                  color={materialTheme.COLORS.BUTTON_COLOR}
+                  color={materialTheme.COLORS.INFO}
                   onPress={() => {this.handleUpdateProfile()}}
                   >
                   <Text
+                    size={16} bold
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>UPDATE</Text>
                 </Button>
@@ -277,7 +282,7 @@ class Settings extends React.Component {
 
 const styles = StyleSheet.create({
   profile: {
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0,
+    marginTop: 0,
   },
   profileImage: {
     width: width * 1.1,
