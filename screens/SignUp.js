@@ -149,7 +149,7 @@ class SignUp extends React.Component {
                   placeholderTextColor={materialTheme.COLORS.MUTED}
                   borderless
                   color="white"
-                  placeholder="Full Name"
+                  placeholder="User Name"
                   autoCapitalize="none"
                   style={[styles.input, this.state.active.userName ? styles.inputActive : null]}
                   onChangeText={text => this.handleChange('userName', text)}
