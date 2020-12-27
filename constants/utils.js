@@ -12,3 +12,7 @@ export const validatePassword = (password) => {
     var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       return re.test(password);
   };
+
+export const  hasWhiteSpace = (text) => {
+    return text.indexOf(' ') >= 0;
+}

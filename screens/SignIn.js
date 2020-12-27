@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform } from 'react-native';
+import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 import { View, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -77,56 +77,12 @@ class SignIn extends React.Component {
         style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>           
         <Block flex middle>    
           <KeyboardAvoidingView behavior="padding" enabled>
-            <Block middle>
-              <Block row center space="between" style={{ marginVertical: theme.SIZES.BASE * 0.1 }}>
-                {/* <Block flex middle right>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="facebook"
-                    iconFamily="font-awesome"
-                    color={theme.COLORS.FACEBOOK}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                    onPress={() => Alert.alert('Not implemented')}
-                  />
-                </Block>
-                <Block flex middle center>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="twitter"
-                    iconFamily="font-awesome"
-                    color={theme.COLORS.TWITTER}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                    onPress={() => Alert.alert('Not implemented')}
-                  />
-                </Block>
-                <Block flex middle left>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="dribbble"
-                    iconFamily="font-awesome"
-                    color={theme.COLORS.DRIBBBLE}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                    onPress={() => Alert.alert('Not implemented')}
-                  />
-                </Block> */}
-              </Block>
-            </Block>
-            <Block middle style={{ paddingVertical: theme.SIZES.BASE * 2.625}}>
-              <Text center color="black" size={14}>
-                {/* or be classical */}
-              </Text>
+            <Block middle style={{ paddingTop: 20}}>
+            <Image
+            style={{width: width * 0.8, height: 150}}
+                  resizeMode="center"
+                  source={require("../assets/images/banner.png")}
+              ></Image>
             </Block>
             <Block flex>
               <Block center>

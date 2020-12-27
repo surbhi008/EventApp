@@ -1,16 +1,18 @@
 import React from 'react';
-import { Alert, Dimensions, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { Alert, Dimensions, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme, utils } from '../constants/';
-import { HeaderHeight, validatePassword } from "../constants/utils";
+import { hasWhiteSpace, HeaderHeight, validatePassword } from "../constants/utils";
 import { compose } from "recompose"
 import { callSignUp } from '../actions';
 import { connect } from 'react-redux'
 import withLoadingScreen from '../HOC/spinner';
 import { StackActions } from '@react-navigation/native';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNC_DTPicker from '../components/RNC_DTPicker';
 const { height, width } = Dimensions.get('window');
 
 class SignUp extends React.Component {
@@ -42,7 +44,10 @@ class SignUp extends React.Component {
     const { navigation } = this.props;
     const {userName, email, password, confirmPassword} = this.state
     if (userName.length === 0) {
-      Alert.alert("Please provide Full Name.")
+      Alert.alert("Please provide Username.")
+      return
+    } else if (hasWhiteSpace(userName)) {
+      Alert.alert("Please provide valid Username.")
       return
     } else if (email.length === 0) {
       Alert.alert("Please provide Email.")
@@ -60,8 +65,6 @@ class SignUp extends React.Component {
       Alert.alert("Password & Confirm Password doesn't Match.")
       return
     }
-
-
     password.length === 0
     const request = {
       userName: userName,
@@ -92,56 +95,13 @@ class SignUp extends React.Component {
         style={[styles.signup, { flex: 1, paddingTop: theme.SIZES.BASE * 4 }]}>
         <Block flex middle>
           <KeyboardAvoidingView behavior="padding" enabled>
-            <Block style={{ marginBottom: height * 0.05 }}>
-              <Block row center space="between" style={{ marginVertical: theme.SIZES.BASE * 1.875 }}>
-                {/* <Block flex middle right>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="facebook"
-                    iconFamily="font-awesome"
-                    onPress={() => Alert.alert('Not implemented')}
-                    color={theme.COLORS.FACEBOOK}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                  />
-                </Block>
-                <Block flex middle center>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="twitter"
-                    iconFamily="font-awesome"
-                    onPress={() => Alert.alert('Not implemented')}
-                    color={theme.COLORS.TWITTER}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                  />
-                </Block>
-                <Block flex middle left>
-                  <Button
-                    round
-                    onlyIcon
-                    iconSize={theme.SIZES.BASE * 1.625}
-                    icon="dribbble"
-                    iconFamily="font-awesome"
-                    onPress={() => Alert.alert('Not implemented')}
-                    color={theme.COLORS.DRIBBBLE}
-                    shadowless
-                    iconColor={theme.COLORS.WHITE}
-                    style={styles.social}
-                  />
-                </Block> */}
-              </Block>
-              <Text color='#fff' center size={theme.SIZES.FONT * 0.875}>
-                {/* or be classical */}
-              </Text>
+          <Block middle>
+            <Image
+            style={{width: width * 0.8, height: 150}}
+                  resizeMode="center"
+                  source={require("../assets/images/banner.png")}
+              ></Image>
             </Block>
-
             <Block flex={1} center space="between">
               <Block center>
                 <Input
@@ -197,6 +157,7 @@ class SignUp extends React.Component {
                   onBlur={() => this.toggleActive('confirmPassword')}
                   onFocus={() => this.toggleActive('confirmPassword')}
                 />
+                <RNC_DTPicker></RNC_DTPicker>
               </Block>
               <Block flex top style={{ marginTop: 20 }}>
                 <Button

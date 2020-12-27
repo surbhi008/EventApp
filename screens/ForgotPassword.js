@@ -12,9 +12,10 @@ export default class SignIn extends React.Component {
   state = {
     email: '-',
     password: '-',
+    displayOtp: false, // make this flag true when receive successful api response
     active: {
       email: false,
-      password: false,
+      otp: false,
     }
   }
 
@@ -65,6 +66,7 @@ export default class SignIn extends React.Component {
               </Block>
               <Block flex top style={{ marginTop: 20 }}>
                 <Button
+                  disabled={this.state.displayOtp}
                   shadowless
                   color={materialTheme.COLORS.BUTTON_COLOR}
                   style={{ height: 48 }}
@@ -73,7 +75,7 @@ export default class SignIn extends React.Component {
                   {/* Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,) */}
                   <Text
                     color={theme.COLORS.BLACK} 
-                    size={theme.SIZES.FONT}>SEND EMAIL</Text>
+                    size={theme.SIZES.FONT}>SEND OTP ON EMAIL</Text>
                 </Button>
                 <Button color="transparent" shadowless onPress={() => navigation.navigate('Sign Up')}>
                   <Text
@@ -85,6 +87,20 @@ export default class SignIn extends React.Component {
                     {"Don't have an account? Sign Up"}
                   </Text>
                 </Button>
+                <Block center>
+                {this.state.displayOtp && <Input
+                  borderless
+                  color="white"
+                  placeholder="OTP"
+                  autoCapitalize="none"
+                  bgColor='transparent'
+                  onBlur={() => this.toggleActive('otp')}
+                  onFocus={() => this.toggleActive('otp')}
+                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  onChangeText={text => this.handleChange('otp', text)}
+                  style={[styles.input, this.state.active.otp ? styles.inputActive : null]}
+                />}
+              </Block>
               </Block>
             </Block>
           </KeyboardAvoidingView>
