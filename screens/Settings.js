@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, Alert } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Picker, Alert, View } from 'react-native';
 import { Block, Text, theme, Button, Input } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -13,13 +13,16 @@ import { Images, materialTheme } from '../constants';
 import { HeaderHeight, validatePassword } from "../constants/utils";
 import RNF_ImagePicker from '../components/RNF_ImagePicker';
 import MapView from 'react-native-maps';
-import { Picker } from 'react-native';
+// import {  } from '@react-native-community/picker';
 import { Keyboard } from 'react-native'
 import {PasswordPopup} from './PasswordPopup';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
-
+const PICKER_TYPE = {
+  MILES: "MILES",
+  ACCOUNT_TYPE: "TYPE"
+}
 class Settings extends React.Component {
 
   constructor(props) {
@@ -36,7 +39,11 @@ class Settings extends React.Component {
       locationLatLong: this.props.profileData && this.props.profileData.userDetail.locationLatLong,
       // password: this.props.profileData && this.props.profileData.userDetail.password,
       password: "Admin@123" ,
-
+      accountType: "",
+      pickerDataSource: [],
+      selectedPicker: PICKER_TYPE.MILES,
+      miles: ["5 miles", "10 miles", "25 miles", "100 miles", "150 miles"],
+      accountType: ["Personal", "Business"],
       visiblePasswordModel: false,
       active: {
         userId: false,
@@ -53,6 +60,10 @@ class Settings extends React.Component {
 
   handleChange = (name, value) => {
     this.setState({ [name]: value });
+  }
+
+  selectPickerDataSource() {
+    return this.state.selectedPicker === PICKER_TYPE.MILES ? this.setState({pickerDataSource: this.state.miles})  : this.setState({pickerDataSource: this.state.accountType})
   }
 
   handleUpdateProfile () {
@@ -106,9 +117,15 @@ class Settings extends React.Component {
     console.log("profileData",this.props.profileData)
   }
 
+  selectPickerItem() {
+    this.setState({
+      pickerHeight: 0
+    })
+  }
+
   render() {
-    // const pickerHeight = 0
-    const {userId, userName, fullName, email, imageURL, miles, address, locationLatLong, password} = this.state;
+    const { navigation } = this.props;
+    const {selectedPicker, userName, fullName, email, imageURL, miles, address, locationLatLong, password, accountType} = this.state;
     return (
       <LinearGradient
         start={{ x: 0, y: 0 }}
@@ -189,8 +206,9 @@ class Settings extends React.Component {
                     onFocus={()=>{
                       Keyboard.dismiss()
                       this.setState({
-                        pickerHeight: this.state.pickerHeight > 0 ? 0 : 200
-                      })
+                        pickerHeight: this.state.pickerHeight > 0 ? 0 : 200,
+                        selectedPicker: PICKER_TYPE.MILES
+                      },()=>this.selectPickerDataSource())
                     }}
                     bgColor='transparent'
                     placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
@@ -202,18 +220,29 @@ class Settings extends React.Component {
                     // onBlur={() => this.toggleActive('miles')}
                     // onFocus={() => this.toggleActive('miles')}
                   />
-                  {this.state.pickerHeight > 0 && <Picker    
-                                                                            
-                    selectedValue={miles}
-                    onValueChange={(text) => this.handleChange('miles', text)}
-                    style={{height: this.state.pickerHeight, bottom: 0, left: 0, right: 0 }}
-                    >
-                    <Picker.Item label="5 mile" value="5" />
-                    <Picker.Item label="10 mile" value="10" />
-                    <Picker.Item label="25 mile" value="25" />
-                    <Picker.Item label="100 mile" value="100" />
-                    <Picker.Item label="150 mile" value="150" />
-                  </Picker>}
+                </Block>
+              </Block>
+              <Block row space="between">
+                <Block flex={1}>
+                  <Text bold size={14}>Account Type</Text>
+                    <Input
+                    onFocus={()=>{
+                      Keyboard.dismiss()
+                      this.setState({
+                        pickerHeight: this.state.pickerHeight > 0 ? 0 : 200,
+                        selectedPicker: PICKER_TYPE.ACCOUNT_TYPE
+                      },()=>this.selectPickerDataSource())
+                    }}
+                    bgColor='transparent'
+                    placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                    color="black"
+                    value={accountType}
+                    autoCapitalize="none"
+                    // style={[styles.input, this.state.active.miles ? styles.inputActive : null]}
+                    onChangeText={text => this.handleChange('accountType', text)}
+                    // onBlur={() => this.toggleActive('miles')}
+                    // onFocus={() => this.toggleActive('miles')}
+                  />
                 </Block>
               </Block>
               <Block row space="between">
@@ -240,7 +269,17 @@ class Settings extends React.Component {
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>Change Location</Text>
                   </Button>
-                  <MapView style={styles.mapStyle} />
+                  <Button            
+                  shadowless
+                  onPress={()=>{navigation.navigate('MapScreen')}}
+                  style={{height: 200, marginVertical: 20, width: width - theme.SIZES.BASE * 4,
+                  }}
+                  color={materialTheme.COLORS.INFO}>
+                    <Image
+                    style={{height: 200, width: width - theme.SIZES.BASE * 4}}
+                    source={require("../assets/images/map.png")}
+                    />
+                  </Button>
                 </Block>
               </Block>
               <Block row space="between" style={{alignItems: "center"}}>
@@ -273,8 +312,44 @@ class Settings extends React.Component {
       <PasswordPopup 
       setModalVisible={()=>this.setState({visiblePasswordModel:false})}
       visible={this.state.visiblePasswordModel}></PasswordPopup>
-
-            </ScrollView>
+      </ScrollView>
+      {this.state.pickerHeight > 0 && <View>
+        <View 
+          style={{flexDirection:"row", height:40, width: width, justifyContent: "space-between", backgroundColor: materialTheme.COLORS.INFO}}
+        >
+        <Button
+          shadowless
+          style={{height:40, width: 100, backgroundColor: materialTheme.COLORS.INFO}}
+          onPress={() => {this.selectPickerItem()}}
+          >
+          <Text
+            size={16} bold
+            color={theme.COLORS.BLACK} 
+            size={theme.SIZES.FONT}>Cancel</Text>
+        </Button>
+        <Button
+          shadowless
+          style={{height:40, width: 100, backgroundColor: materialTheme.COLORS.INFO}}
+          onPress={() => {this.selectPickerItem()}}
+          >
+          <Text
+            size={16} bold
+            color={theme.COLORS.BLACK} 
+            size={theme.SIZES.FONT}>Select</Text>
+        </Button>
+        </View>
+        <Picker       
+        selectedValue={selectedPicker === PICKER_TYPE.MILES ? miles : accountType}
+        onValueChange={(text) => this.handleChange(selectedPicker === PICKER_TYPE.MILES ? 'miles' : "accountType", text)}
+        style={{height: this.state.pickerHeight, backgroundColor: "white"}}
+        >
+          {
+            this.state.pickerDataSource.map((item) => (
+              <Picker.Item label={item} value={item} />        
+            ))
+          }        
+      </Picker>
+      </View>}
       </LinearGradient>
     );
   }

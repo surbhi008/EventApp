@@ -14,6 +14,7 @@ import { StackActions } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import RNC_DTPicker from '../components/RNC_DTPicker';
 const { height, width } = Dimensions.get('window');
+import {Picker} from '@react-native-community/picker';
 
 class SignUp extends React.Component {
   state = {
@@ -26,7 +27,8 @@ class SignUp extends React.Component {
       email: false,
       password: false,
       confirmPassword: false,
-    }
+    },
+    language: 'java',
   }
 
   handleChange = (name, value) => {

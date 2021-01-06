@@ -47,6 +47,7 @@ import { tabs } from "../constants/";
 import Events from "../screens/Events";
 import Logout from "../screens/Logout";
 import Home from "../screens/Home";
+import MapScreen from "../screens/MapScreen";
 
 const { width } = Dimensions.get("screen");
 
@@ -787,6 +788,20 @@ export default function OnboardingStack() {
               navigation={navigation}
               scene={scene}
             />
+          )
+        }}
+      />    
+      <Stack.Screen
+        name="MapScreen"
+        component={MapScreen}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+            back
+            title="Privacy"
+            scene={scene}
+            navigation={navigation}
+          />
           )
         }}
       />     

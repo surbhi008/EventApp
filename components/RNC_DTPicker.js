@@ -36,7 +36,7 @@ export default class RNC_DTPicker extends Component {
         maxdate = moment(new Date()).subtract(18, "years").toISOString(); // for specific format
 
         return (                       
-            <View style={{alignItems: "center", flexDirection: "row", height: 50,width: width * 0.9, justifyContent: "center"}}>
+            <View style={{alignItems: "center", flexDirection: "row", height: 50,width: width * 0.9, justifyContent: "center", right: 20}}>
                     <Text style={{ color:"white", flexDirection: "row",width: width * 0.5, textAlign :"center"}}>Select Birthdate</Text>
                 {
                     show && (

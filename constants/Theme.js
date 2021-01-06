@@ -23,6 +23,7 @@ export default {
     TEXT:'#0A0A0A',
     BACK:'#F2AF5A',
     MAIN_COLOR:'#000000',
+    WHITE:'#FFFFFF',
     SUB_COLOR:'#000000'
   },
   SIZES: {

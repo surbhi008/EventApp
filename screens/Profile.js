@@ -1,17 +1,20 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, View } from 'react-native';
+import { Block, Text, theme, Button } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Icon } from '../components';
 import { Images, materialTheme } from '../constants';
-import { HeaderHeight } from "../constants/utils";
+import * as ImagePicker from 'expo-image-picker';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 import { compose } from "recompose"
 import { connect } from 'react-redux'
 import withLoadingScreen from '../HOC/spinner';
+import { Followers } from './Followers';
+import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
+import { MaterialIcons } from '@expo/vector-icons';
 
 class Profile extends React.Component {
 
@@ -19,6 +22,9 @@ class Profile extends React.Component {
     userName: '',
     email: '',
     location: '',
+    visibleFollowers: false,
+    followers: true,
+    image: Images.Profile
   } 
   
   componentDidMount() {
@@ -29,16 +35,75 @@ class Profile extends React.Component {
     })
   }
 
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      this.setState({
+        image: result.uri
+      })
+    }
+  }
+
   render() {
+    const followers = "10\nFollowers"
+    const followings = "5\nFollowings"
+    const { navigation } = this.props;
     return (
-      <LinearGradient
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0.25, y: 1.1 }}
-        locations={[0.2, 1]}
-        colors={['#000000', '#000000']}
-        style={[styles.signin, {flex: 1, paddingTop: 10}]}>
       <Block flex style={styles.profile}>
-        <ImageBackground
+        <View style={{height: 200, justifyContent: "center"}}>
+          <View style={{flexDirection: "row", alignItems: "center"}}>
+           <View>
+            <Image 
+            style={{height: 100, width: 100, marginLeft: 20, borderRadius:50}}
+            source={{uri: this.state.image}}/>
+            <Button
+            onPress={() => this.pickImage()}
+          shadowless
+          style={{height:30, width: 30, borderRadius: 15, position: "absolute", bottom:0,right:0, backgroundColor: materialTheme.COLORS.WHITE}}
+          >
+            <MaterialIcons name="add-circle" color={materialTheme.COLORS.INFO} size={30} />
+          </Button>
+          </View>
+            <Block row style={{marginLeft: 20}}>
+            <Text 
+            style={{width:80, flexDirection: "row", alignItems: "center", textAlign: "center"}}
+            color={theme.COLORS.BLACK} size={16} onPress={() => {
+                      this.setState({
+                        visibleFollowers: true,
+                        followers: true
+                      })
+                    }}>
+                      {followers}
+            </Text>
+            <Text 
+            style={{width:80, flexDirection: "row", alignItems: "center", marginLeft: 20, textAlign: "center"}}
+            color={theme.COLORS.BLACK} size={16} onPress={() => {
+                      this.setState({
+                        visibleFollowers: true,
+                        followers: false
+                      })
+                    }}>
+                      {followings}
+            </Text>
+            </Block>
+          </View>
+          <Text 
+          color={theme.COLORS.BLACK} size={28} 
+          style={{ paddingBottom: 5, marginLeft: 20, marginTop: 10 }}>{this.state.userName}</Text>
+          <Text 
+          onPress={()=> {navigation.navigate('MapScreen')}}
+          style={{paddingBottom: 5,marginLeft: 20 }}
+          color={theme.COLORS.BLACK} size={16}>
+                    <Icon name="map-marker" family="font-awesome" color={theme.COLORS.MUTED} size={16} />
+                    {`  `} Los Angeles, CA
+                  </Text>
+        </View>
+        {/* <ImageBackground
           source={{ uri: Images.Profile }}
           style={styles.profileContainer}
           imageStyle={styles.profileImage}>
@@ -46,9 +111,6 @@ class Profile extends React.Component {
             <Block style={styles.profileTexts}>
               <Text color="white" size={28} style={{ paddingBottom: 8 }}>{this.state.userName}</Text>
               <Block row space="between">
-                {/* <Block row>
-                  <Text color="white" size={16} muted style={styles.seller}>{this.state.email}</Text>
-                </Block> */}
                 <Block>
                   <Text color={theme.COLORS.MUTED} size={16}>
                     <Icon name="map-marker" family="font-awesome" color={theme.COLORS.MUTED} size={16} />
@@ -58,7 +120,11 @@ class Profile extends React.Component {
               </Block>
               <Block row space="between">
                   <Block row>
-                    <Text color={theme.COLORS.MUTED} size={16}>
+                    <Text color={theme.COLORS.MUTED} size={16} onPress={() => {
+                      this.setState({
+                        visibleFollowers: true
+                      })
+                    }}>
                       Followers (10)
                     </Text>
                   </Block>
@@ -66,8 +132,8 @@ class Profile extends React.Component {
             </Block>
             <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']} style={styles.gradient} />
           </Block>
-        </ImageBackground>
-        <Block flex={0.7}>
+        </ImageBackground> */}
+        <Block flex={1}>
           <Block style={styles.options}>
             <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
               <Block row space="between" style={{ paddingVertical: 16, alignItems: 'baseline' }}>
@@ -90,17 +156,20 @@ class Profile extends React.Component {
                 ))}
               </Block>
             </ScrollView>
+            <Followers 
+           isFollowers={this.state.followers}
+           setModalVisible={()=>this.setState({visibleFollowers:false})}
+           visible={this.state.visibleFollowers}></Followers>
           </Block>
         </Block>
       </Block>
-      </LinearGradient>
     );
   }
 }
 
 const styles = StyleSheet.create({
   profile: {
-    marginTop: 0,
+    marginTop: 25,
   },
   profileImage: {
     width: width * 1.1,
@@ -114,7 +183,6 @@ const styles = StyleSheet.create({
   profileDetails: {
     paddingTop: theme.SIZES.BASE * 4,
     justifyContent: 'flex-end',
-    position: 'relative',
   },
   profileTexts: {
     paddingHorizontal: theme.SIZES.BASE * 2,
@@ -133,11 +201,11 @@ const styles = StyleSheet.create({
     marginRight: theme.SIZES.BASE / 2,
   },
   options: {
-    position: 'relative',
+    // position: 'relative',
     paddingHorizontal: theme.SIZES.BASE,
     paddingVertical: theme.SIZES.BASE,
     marginHorizontal: theme.SIZES.BASE,
-    marginTop: -theme.SIZES.BASE,
+    marginTop: theme.SIZES.BASE,
     marginBottom: 0,
     borderTopLeftRadius: 13,
     borderTopRightRadius: 13,
@@ -147,6 +215,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOpacity: 0.2,
     zIndex: 2,
+    borderRadius: 13
   },
   thumb: {
     borderRadius: 4,
@@ -154,14 +223,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: thumbMeasure,
     height: thumbMeasure
-  },
-  gradient: {
-    zIndex: 1,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '30%',
-    position: 'absolute',
   },
 });
 
