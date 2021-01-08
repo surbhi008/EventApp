@@ -4,4 +4,5 @@ export const web_urls = {
     SIGNUP_ENDPOINT : "Authentication/Register",
     PROFILE_ENDPOINT : "Masters/Profile/GetById",
     UPDATE_PROFILE_ENDPOINT : "Masters/Profile/Update",
+    FORGOTPASSWORD_ENDPOINT : "Authentication/ForgotPassword",
 }

@@ -51,3 +51,27 @@ export const signup = (url, data) => {
             console.error(error);
         });
 }
+
+export const forgotPassword = (url, data) => {
+    const body = {
+        "userEmail": data.userEmail,
+        "userOTP": data.userOTP,
+        "userPassword": data.userPassword,
+        "type": data.type
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    };
+
+    return fetch(url, requestOptions)
+        .then(response =>                     
+            response.json()            
+        ).then((json) => {
+            return handleError(json);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}

@@ -22,3 +22,8 @@ export const profileApiCall = (data) => ({
     type: "PROFILE_API",
     data: data
 });
+
+export const callForgotPassword = (data) => ({
+    type: "FORGOTPASSWORD_API",
+    data: data
+});

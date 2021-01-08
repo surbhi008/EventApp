@@ -5,17 +5,27 @@ import { Block, Button, Input, Text, theme } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme } from '../constants';
 import { HeaderHeight } from "../constants/utils";
+import { compose } from "recompose"
+import { callForgotPassword } from '../actions';
+import { connect } from 'react-redux'
+// import withLoadingScreen from '../HOC/spinner';
+import { forgotPassword } from '../api/auth-api';
 
 const { width } = Dimensions.get('window');
 
-export default class SignIn extends React.Component {
+class ForgotPassword extends React.Component {
   state = {
     email: '-',
-    password: '-',
+    otp: '-',
     displayOtp: false, // make this flag true when receive successful api response
+    password: '-',
+    confirmPassword: '-',
+    displayPassword: false, // make this flag true when receive successful api response
     active: {
       email: false,
       otp: false,
+      password: false,
+      confirmPassword: false,
     }
   }
 
@@ -28,6 +38,47 @@ export default class SignIn extends React.Component {
     active[name] = !active[name];
 
     this.setState({ active });
+  }
+
+  handleForgotPassword () {
+    const { navigation } = this.props;
+    const {email, otp, displayOtp, password, confirmPassword, displayPassword} = this.state
+    if (email.length === 0 && (this.state.displayOtp == false) && (this.state.displayPassword == false)) {
+      Alert.alert("Please provide Email.")
+      return
+    } else if (otp.length === 0 && this.state.displayOtp) {
+      Alert.alert("Please provide OTP.")
+      return
+    } else if (otp.length !== 6 && this.state.displayOtp) {
+      Alert.alert("Please provide Correct OTP.")
+      return
+    } else if (password.length === 0 && this.state.displayPassword) {
+      Alert.alert("Please provide Password.")
+      return
+    } else if (confirmPassword.length === 0 && this.state.displayPassword) {
+      Alert.alert("Please provide Confirm Password.")
+      return
+    } else if (!(validatePassword(password)) && this.state.displayPassword) {
+      Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+      return
+    } else if (password !== confirmPassword && this.state.displayPassword) {
+      Alert.alert("Password & Confirm Password doesn't Match.")
+      return
+    }
+    password.length === 0
+    const request = {
+      userName: userName,
+      email: email,
+      password: password,
+      callback: (response) => {
+        if (response.success) {   
+          // Alert.alert("Registration successful.")
+        } else {
+          Alert.alert(response.message)
+        }     
+      }
+    }
+    this.props.callForgotPassword(request)
   }
 
   render() {
@@ -50,7 +101,7 @@ export default class SignIn extends React.Component {
             </Block>
             <Block flex>
               <Block center>
-                <Input
+                {(this.state.displayOtp == false) && (this.state.displayPassword == false) && <Input
                   borderless
                   color="white"
                   placeholder="Email"
@@ -62,7 +113,47 @@ export default class SignIn extends React.Component {
                   placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
                   onChangeText={text => this.handleChange('email', text)}
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
-                />
+                />}
+                {this.state.displayOtp && <Input
+                  borderless
+                  color="white"
+                  placeholder="OTP"
+                  autoCapitalize="none"
+                  bgColor='transparent'
+                  onBlur={() => this.toggleActive('otp')}
+                  onFocus={() => this.toggleActive('otp')}
+                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  onChangeText={text => this.handleChange('otp', text)}
+                  style={[styles.input, this.state.active.otp ? styles.inputActive : null]}
+                />}
+
+                {this.state.displayPassword && <Input
+                  borderless
+                  color="white"
+                  placeholder="Password"
+                  autoCapitalize="none"
+                  bgColor='transparent'
+                  onBlur={() => this.toggleActive('password')}
+                  onFocus={() => this.toggleActive('password')}
+                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  onChangeText={text => this.handleChange('password', text)}
+                  style={[styles.input, this.state.active.password ? styles.inputActive : null]}
+                />}
+
+                {this.state.displayPassword && <Input
+                  borderless
+                  color="white"
+                  placeholderTextColor="white"
+                  placeholder="Confirm Password"
+                  type="password"
+                  autoCapitalize="none"
+                  bgColor='transparent'
+                  onBlur={() => this.toggleActive('confirmPassword')}
+                  onFocus={() => this.toggleActive('confirmPassword')}
+                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+                  onChangeText={text => this.handleChange('confirmPassword', text)}
+                  style={[styles.input, this.state.active.confirmPassword ? styles.inputActive : null]}
+                />}
               </Block>
               <Block flex top style={{ marginTop: 20 }}>
                 <Button
@@ -87,20 +178,6 @@ export default class SignIn extends React.Component {
                     {"Don't have an account? Sign Up"}
                   </Text>
                 </Button>
-                <Block center>
-                {this.state.displayOtp && <Input
-                  borderless
-                  color="white"
-                  placeholder="OTP"
-                  autoCapitalize="none"
-                  bgColor='transparent'
-                  onBlur={() => this.toggleActive('otp')}
-                  onFocus={() => this.toggleActive('otp')}
-                  placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
-                  onChangeText={text => this.handleChange('otp', text)}
-                  style={[styles.input, this.state.active.otp ? styles.inputActive : null]}
-                />}
-              </Block>
               </Block>
             </Block>
           </KeyboardAvoidingView>
@@ -137,3 +214,22 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  callForgotPassword: (data) => dispatch(callForgotPassword(data)),
+})
+
+const mapStateToProps = (state) => ({
+  isLoading: state.isLoading,
+  // getVideoData: videoSelector
+})
+
+const container = compose(
+  connect(
+      mapStateToProps,
+      mapDispatchToProps
+  ),
+  // withLoadingScreen
+)
+
+export default compose(container)(forgotPassword)
