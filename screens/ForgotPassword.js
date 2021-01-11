@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
+import {View, ActivityIndicator, StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,6 +8,7 @@ import { HeaderHeight, validatePassword } from "../constants/utils";
 import { compose } from "recompose"
 import { container } from './ForgotPasswordIndex';
 import { ScrollView } from 'react-native-gesture-handler';
+import { StackActions } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -29,7 +30,8 @@ class ForgotPassword extends React.Component {
         password: false,
         confirmPassword: false,
       },
-      displayOtp: false
+      displayOtp: false,
+      isLoading: false
     }
   }
 
@@ -47,7 +49,15 @@ class ForgotPassword extends React.Component {
     this.setState({ active });
   }
 
+  setLoaderValue() {
+    this.setState({
+      isLoading: !this.state.isLoading
+    })
+  }
+
   handleForgotPassword() {
+    this.setLoaderValue()
+
     // const { navigation } = this.props;
     // const {email, otp, password, confirmPassword, displayPassword} = this.state
     // if (email.length === 0 && (this.state.displayOtp == false) && (this.state.displayPassword == false)) {
@@ -76,6 +86,7 @@ class ForgotPassword extends React.Component {
     const request = {
       email: this.state.email,
       callback: (response) => {
+        this.setLoaderValue()
         if (response.success) {   
           console.log("I am here")
           this.setState({
@@ -90,10 +101,12 @@ class ForgotPassword extends React.Component {
   }
 
   verifyOTP () {
+    this.setLoaderValue()
     const request = {
       email: this.state.email,
       otp: this.state.otp,
       callback: (response) => {
+        this.setLoaderValue()
         if (response.success) {   
           console.log("I am here")
           this.setState({
@@ -109,11 +122,13 @@ class ForgotPassword extends React.Component {
   }
 
   resetPassword () {
+    this.setLoaderValue()
     const request = {
       email: this.state.email,
       password: this.state.password,
       token: this.state.token,
       callback: (response) => {
+        this.setLoaderValue()
         if (response.success) {   
           Alert.alert(response.message)
           const { navigation } = this.props;
@@ -127,9 +142,30 @@ class ForgotPassword extends React.Component {
     this.props.callChangePassword(request)
   }
 
+  renderSpinner() {
+    return (
+      <View
+      style={{
+          backgroundColor: "black",
+          height: "100%",
+          width: "100%",
+          opacity: 0.7,
+          alignItems: "center",
+          justifyContent: "space-around",
+          zIndex: 999999,
+          position: "absolute"
+      }}
+      >
+        <ActivityIndicator             
+          size="small" 
+          color="white" />
+      </View>
+    )
+  }
+
   render() {
     const { navigation } = this.props;
-    const { email, displayPassword , displayOtp} = this.state;
+    const { displayPassword , displayOtp, isLoading} = this.state;
     console.log("otp status", displayOtp)
     return (
       <LinearGradient
@@ -138,9 +174,9 @@ class ForgotPassword extends React.Component {
         locations={[0.2, 1]}
         colors={['#000000', '#000000']}
         style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>
-        <ScrollView>
         <Block flex middle>
-          <KeyboardAvoidingView behavior="padding" enabled>            
+          <KeyboardAvoidingView behavior="padding" enabled>   
+          <ScrollView>         
             <Block middle>
             <Image
             style={{width: width * 0.8, height: 150}}
@@ -207,6 +243,7 @@ class ForgotPassword extends React.Component {
                 {displayPassword && <Block style={styles.passwordContainerStyle}>
                   <Input
                   borderless
+                  password
                   color="white"
                   placeholder="Password"
                   autoCapitalize="none"
@@ -219,6 +256,7 @@ class ForgotPassword extends React.Component {
                 />
                 <Input
                   borderless
+                  password
                   color="white"
                   placeholderTextColor="white"
                   placeholder="Confirm Password"
@@ -254,9 +292,10 @@ class ForgotPassword extends React.Component {
             </Button>
               </Block>
             </Block>
+            </ScrollView>
           </KeyboardAvoidingView>
         </Block>
-        </ScrollView>
+        {isLoading && this.renderSpinner()}
       </LinearGradient>
     );
   }

@@ -260,15 +260,7 @@ class Settings extends React.Component {
               </Block>
               <Block row space="between">
                 <Block flex={1}>
-                  <Button            
-                  shadowless
-                  style={styles.addToCart}
-                  color={materialTheme.COLORS.INFO}>
-                    <Text
-                    size={16} bold
-                    color={theme.COLORS.BLACK} 
-                    size={theme.SIZES.FONT}>Change Location</Text>
-                  </Button>
+                  <Text bold size={14}>Choose Location From Map</Text>
                   <Button            
                   shadowless
                   onPress={()=>{navigation.navigate('MapScreen')}}
@@ -282,14 +274,6 @@ class Settings extends React.Component {
                   </Button>
                 </Block>
               </Block>
-              <Block row space="between" style={{alignItems: "center"}}>
-                <Block style={{alignItems: "center", flex: 1}}>
-                  <Text style={{marginBottom: 10}} bold size={14}>Upload Image</Text>
-                  <Block style={{width: width * 0.8}}>
-                    <RNF_ImagePicker></RNF_ImagePicker>
-                  </Block> 
-                </Block>
-              </Block>
               <Block row space="between">
                 <Block flex={1}>
                 <Button
@@ -299,7 +283,7 @@ class Settings extends React.Component {
                   onPress={() => {this.handleUpdateProfile()}}
                   >
                   <Text
-                    size={16} bold
+                    size={16} 
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>UPDATE</Text>
                 </Button>
