@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform } from 'react-native';
+import { StyleSheet, Dimensions, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
 import { Block, Button, Input, Text, theme } from 'galio-framework';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,6 +7,7 @@ import { materialTheme } from '../constants';
 import { HeaderHeight, validatePassword } from "../constants/utils";
 import { compose } from "recompose"
 import { container } from './ForgotPasswordIndex';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const { width } = Dimensions.get('window');
 
@@ -137,12 +138,15 @@ class ForgotPassword extends React.Component {
         locations={[0.2, 1]}
         colors={['#000000', '#000000']}
         style={[styles.signin, {flex: 1, paddingTop: theme.SIZES.BASE * 4}]}>
+        <ScrollView>
         <Block flex middle>
           <KeyboardAvoidingView behavior="padding" enabled>            
-            <Block middle style={{ paddingVertical: theme.SIZES.BASE * 2.625}}>
-              <Text center color="white" size={18}>
-                Forgot Password
-              </Text>
+            <Block middle>
+            <Image
+            style={{width: width * 0.8, height: 150}}
+                  resizeMode="center"
+                  source={require("../assets/images/banner.png")}
+              ></Image>
             </Block>
             <Block flex>
               <Block center>
@@ -161,31 +165,19 @@ class ForgotPassword extends React.Component {
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
                 />                               
               </Block>
-              <Block flex top style={{ marginTop: 20 }}>
+              <Block flex top style={styles.passwordContainerStyle}>
                 <Button
                   disabled={displayOtp}
-                  opacity={0.9}
                   shadowless
-                  color={materialTheme.COLORS.BUTTON_COLOR}
+                  color={displayOtp ? materialTheme.COLORS.DISABLE_BUTTON_COLOR : materialTheme.COLORS.BUTTON_COLOR}
                   style={{ height: 48 }}
                   onPress={() => this.handleForgotPassword()}
                 >
-                  {/* Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,) */}
                   <Text
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>SEND OTP ON EMAIL</Text>
-                </Button>
-                <Button color="transparent" shadowless onPress={() => navigation.navigate('Sign Up')}>
-                  <Text
-                    center
-                    color={theme.COLORS.WHITE}
-                    size={theme.SIZES.FONT * 0.75}
-                    style={{marginTop:20}}
-                  >
-                    {"Don't have an account? Sign Up"}
-                  </Text>
-                </Button>
-                {displayOtp && <Block><Input
+                </Button>             
+                {displayOtp && <Block style={styles.passwordContainerStyle}><Input
                   borderless
                   editable={!displayPassword}
                   color="white"
@@ -202,8 +194,9 @@ class ForgotPassword extends React.Component {
                   shadowless
                   disabled={displayPassword}
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  style={{ height: 48 }}
+                  style={{ height: 48 }, styles.passwordContainerStyle}
                   onPress={() => this.verifyOTP()}
+                  color={displayPassword ? materialTheme.COLORS.DISABLE_BUTTON_COLOR : materialTheme.COLORS.BUTTON_COLOR}
                 >
                   <Text
                     color={theme.COLORS.BLACK} 
@@ -211,7 +204,7 @@ class ForgotPassword extends React.Component {
                 </Button>
                 </Block>
                 }
-                {displayPassword && <Block>
+                {displayPassword && <Block style={styles.passwordContainerStyle}>
                   <Input
                   borderless
                   color="white"
@@ -238,10 +231,10 @@ class ForgotPassword extends React.Component {
                   onChangeText={text => this.handleChange('confirmPassword', text)}
                   style={[styles.input, this.state.active.confirmPassword ? styles.inputActive : null]}                  
                 />
-                                <Button
+                <Button
                   shadowless
                   color={materialTheme.COLORS.BUTTON_COLOR}
-                  style={{ height: 48 }}
+                  style={{ height: 48 }, styles.passwordContainerStyle}
                   onPress={() => this.resetPassword()}
                 >
                   <Text
@@ -249,10 +242,21 @@ class ForgotPassword extends React.Component {
                     size={theme.SIZES.FONT}>CHANGE PASSWORD</Text>
                 </Button>
                   </Block>}
+                  <Button color="transparent" shadowless onPress={() => navigation.navigate('Sign Up')}>
+              <Text
+                center
+                color={theme.COLORS.WHITE}
+                size={theme.SIZES.FONT * 0.75}
+                style={{marginTop:20}}
+              >
+                {"Don't have an account? Sign Up"}
+              </Text>
+            </Button>
               </Block>
             </Block>
           </KeyboardAvoidingView>
         </Block>
+        </ScrollView>
       </LinearGradient>
     );
   }
@@ -284,6 +288,9 @@ const styles = StyleSheet.create({
   inputActive: {
     borderBottomColor: "white",
   },
+  passwordContainerStyle: {
+    marginTop: 20,
+  }
 });
 
 export default compose(container)(ForgotPassword)
