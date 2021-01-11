@@ -54,10 +54,48 @@ export const signup = (url, data) => {
 
 export const forgotPassword = (url, data) => {
     const body = {
-        "userEmail": data.userEmail,
-        "userOTP": data.userOTP,
-        "userPassword": data.userPassword,
-        "type": data.type
+        "UserEmail": data.userEmail,       
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    };
+
+    return fetch(url, requestOptions)
+        .then(response =>                     
+            response.json()            
+        ).then((json) => {
+            return handleError(json);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+
+export const verifyOtp = (url) => {   
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    };
+
+    return fetch(url, requestOptions)
+        .then(response =>                     
+            response.json()            
+        ).then((json) => {
+            return handleError(json);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+
+export const resetPassword = (url, data) => {
+    const body = {        
+    "userEmail": data.email,
+    "password": data.password,
+    "token": data.token
     }
     const requestOptions = {
         method: 'POST',
@@ -67,7 +105,7 @@ export const forgotPassword = (url, data) => {
 
     return fetch(url, requestOptions)
         .then(response =>                     
-            response.json()            
+                response.json()
         ).then((json) => {
             return handleError(json);
         })

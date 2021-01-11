@@ -27,3 +27,14 @@ export const callForgotPassword = (data) => ({
     type: "FORGOTPASSWORD_API",
     data: data
 });
+
+export const callVerifyOtp = (data) => ({
+    type: "CALL_VERIFY_OTP",
+    data: data
+});
+
+export const callChangePassword = (data) => ({
+    type: "CALL_CHANGE_PASSWORD",
+    data: data
+});
+

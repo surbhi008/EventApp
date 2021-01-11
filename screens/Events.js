@@ -93,7 +93,7 @@ class Events extends React.Component {
         style={[{flex: 1, paddingTop: theme.SIZES.BASE}]}>
       <ScrollView flex center style={styles.home}>
         {this.renderTabs()}
-        {this.renderSearch()}
+        {/* {this.renderSearch()} */}
         {this.renderProducts()}
       </ScrollView></LinearGradient>
     );

@@ -18,6 +18,7 @@ import { Keyboard } from 'react-native'
 import {PasswordPopup} from './PasswordPopup';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -33,7 +34,6 @@ class MapScreen extends React.Component {
       mapRegion: { latitude: 37.78825, longitude: -122.4324, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
       locationResult: null,
       location: {coords: { latitude: 37.78825, longitude: -122.4324}},
-      markers: null
   }}
 
   _handleMapRegionChange = mapRegion => {
@@ -57,7 +57,7 @@ class MapScreen extends React.Component {
  
     let location = await Location.getCurrentPositionAsync({});
     console.log("location====>",JSON.stringify(location.coords))
-    this.setState({ locationResult: JSON.stringify(location), location, });
+    this.setState({ locationResult: `Lat:${JSON.stringify(location.coords.latitude)} Long:${JSON.stringify(location.coords.longitude)}`, location, });
     this.fetchPlaceName(location.coords.latitude, location.coords.longitude)
   };
 
@@ -70,23 +70,60 @@ class MapScreen extends React.Component {
   }
 
   render() {
-    const location = `Location : ${this.state.locationResult}`
+    const location = `${this.state.locationResult}`
     return (     
       <ScrollView style={{backgroundColor: materialTheme.COLORS.WHITE}} vertical={true} showsVerticalScrollIndicator={false}>
-      <Block flex style={styles.profile}>
-          <Text
-            style={{marginTop: 20}}
-            size={16} bold
-            color={theme.COLORS.BLACK}>{location}</Text>
+          <Block flex style={styles.profile}>
+            <GooglePlacesAutocomplete
+            placeholder='Search'
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              console.log(data, details);
+            }}
+            query={{
+              key: 'AIzaSyDp_XRJ8VfYotkkKPQvpGYB7Jy4t28UxaY',
+              language: 'en',
+            }}
+          />
           <MapView style={styles.mapStyle} 
           initialRegion={{latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421}}
           // region={{ latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }}
-          onRegionChange={this._handleMapRegionChange}
-          onPress={(e) => this.setState({ markers: [...this.state.markers, { latlng: e.nativeEvent.coordinate }] })}>
-          {            
-            <MapView.Marker coordinate={this.state.markers && this.state.markers.latlng} />
-          }
+          onRegionChange={this._handleMapRegionChange}>
+            <MapView.Marker
+              draggable
+              onDragEnd={(e) => {
+                console.log("loc===>", e.nativeEvent.coordinate)
+                this.setState({
+                  location: {coords : { latitude: e.nativeEvent.coordinate.latitude, 
+                    longitude: e.nativeEvent.coordinate.longitude}},
+                  locationResult: `Lat:${JSON.stringify(e.nativeEvent.coordinate.latitude)} Long:${JSON.stringify(e.nativeEvent.coordinate.longitude)}`
+                })
+              }}
+              coordinate={this.state.location.coords}
+              title="My Marker"
+              description="Some description"
+            />
           </MapView>
+          <Text
+            style={{marginTop: 20, marginHorizontal: 10}}
+            size={14}
+            color={materialTheme.COLORS.MUTED}>LOCATION</Text>
+          <Input
+          paddingVertical={0}
+            style={styles.input}
+            bgColor='transparent'
+            placeholderTextColor={materialTheme.COLORS.PLACEHOLDER}
+            color="black"
+            value={location}
+            onChangeText={text => this.handleChange('password', text)}
+            borderless
+            onFocus={() => 
+              {
+                Keyboard.dismiss()
+                this.setState({visiblePasswordModel: true})
+              }
+            }
+          />
           <Button
             shadowless
             style={styles.addToCart}
@@ -98,9 +135,9 @@ class MapScreen extends React.Component {
             }}
             >
             <Text
-              size={16} bold
+              size={16} 
               color={theme.COLORS.BLACK} 
-              size={theme.SIZES.FONT}>PICK LOCATION</Text>
+              size={theme.SIZES.FONT}>PICK THIS LOCATION</Text>
           </Button>
       </Block>
       </ScrollView>      
@@ -183,6 +220,16 @@ const styles = StyleSheet.create({
     height:height - 200,
     marginTop: 20,
     backgroundColor: materialTheme.COLORS.WHITE,
+    marginHorizontal: 10,
+    borderRadius: 10
+  },
+  input: {
+    width: width - theme.SIZES.BASE * 2,
+    borderRadius: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: materialTheme.COLORS.PLACEHOLDER,
+    marginHorizontal: 10,
+    paddingHorizontal: 0
   },
   addToCart: {
     width: width - theme.SIZES.BASE * 4,

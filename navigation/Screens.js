@@ -612,7 +612,7 @@ function AppStack(props) {
         }}
       />
       <Drawer.Screen
-        name="Add Event"
+        name="Host"
         component={HostEventStack}
         options={{
           drawerIcon: ({ focused }) => (
@@ -844,30 +844,16 @@ function dashboardStack (props) {
               <MaterialCommunityIcons name="calendar" color={color} size={size} />
             ),
           }}
-        /> */}
-         <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={{
-            tabBarLabel: 'Settings',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="settings"
-                color={color}
-                size={size}
-              />
-            ),
-          }}
-        />
+        /> */}       
         <Tab.Screen
-          name="Add Event"
+          name="Host"
           component={HostEventScreen}
           options={{
             labelStyle:{
               color: "white", 
               numberOfLines:2
             },
-            tabBarLabel: 'Add Event',
+            tabBarLabel: 'Host',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="calendar-account" color={color} size={size} />
             ),
@@ -886,7 +872,21 @@ function dashboardStack (props) {
               />
             ),
           }}
-        />       
+        />      
+          <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="settings"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        /> 
          <Tab.Screen
           name="Logout"
           component={Logout}
