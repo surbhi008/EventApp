@@ -57,31 +57,10 @@ class ForgotPassword extends React.Component {
 
   handleForgotPassword() {
     this.setLoaderValue()
-
-    // const { navigation } = this.props;
-    // const {email, otp, password, confirmPassword, displayPassword} = this.state
-    // if (email.length === 0 && (this.state.displayOtp == false) && (this.state.displayPassword == false)) {
-    //   Alert.alert("Please provide Email.")
-    //   return
-    // } else if (otp.length === 0 && this.state.displayOtp) {
-    //   Alert.alert("Please provide OTP.")
-    //   return
-    // } else if (otp.length !== 6 && this.state.displayOtp) {
-    //   Alert.alert("Please provide Correct OTP.")
-    //   return
-    // } else if (password.length === 0 && this.state.displayPassword) {
-    //   Alert.alert("Please provide Password.")
-    //   return
-    // } else if (confirmPassword.length === 0 && this.state.displayPassword) {
-    //   Alert.alert("Please provide Confirm Password.")
-    //   return
-    // } else if (!(validatePassword(password)) && this.state.displayPassword) {
-    //   Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
-    //   return
-    // } else if (password !== confirmPassword && this.state.displayPassword) {
-    //   Alert.alert("Password & Confirm Password doesn't Match.")
-    //   return
-    // }
+    if (this.state.email.length === 0) {
+      Alert.alert("Please provide Email.")
+      return
+    }
 
     const request = {
       email: this.state.email,
@@ -102,6 +81,14 @@ class ForgotPassword extends React.Component {
 
   verifyOTP () {
     this.setLoaderValue()
+    if (this.state.otp.length === 0) {
+      Alert.alert("Please provide OTP.")
+      return
+    } else if (this.state.otp.length !== 6) {
+      Alert.alert("InCorrect OTP! It must contain 6 digits.")
+      return
+    }
+
     const request = {
       email: this.state.email,
       otp: this.state.otp,
@@ -123,6 +110,20 @@ class ForgotPassword extends React.Component {
 
   resetPassword () {
     this.setLoaderValue()
+    if (this.state.password.length === 0) {
+      Alert.alert("Please provide Password.")
+      return
+    } else if (this.state.confirmPassword.length === 0) {
+      Alert.alert("Please provide Confirm Password.")
+      return
+    } else if (!(validatePassword(this.state.password))) {
+      Alert.alert("Password must contain One LowerCase and UpperCase Character, One Special Character & One Number.")
+      return
+    } else if (this.state.password !== this.state.confirmPassword) {
+      Alert.alert("Password & Confirm Password doesn't Match.")
+      return
+    }
+
     const request = {
       email: this.state.email,
       password: this.state.password,
