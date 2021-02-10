@@ -186,7 +186,7 @@ class ForgotPassword extends React.Component {
               ></Image>
             </Block>
             <Block flex>
-              <Block center>
+              {!displayPassword && <Block center>
                 <Input
                   editable={!displayOtp}
                   borderless
@@ -201,9 +201,9 @@ class ForgotPassword extends React.Component {
                   onChangeText={text => this.handleChange('email', text)}
                   style={[styles.input, this.state.active.email ? styles.inputActive : null]}
                 />                               
-              </Block>
+              </Block>}
               <Block flex top style={styles.passwordContainerStyle}>
-                <Button
+                {!displayPassword && <Button
                   disabled={displayOtp}
                   shadowless
                   color={displayOtp ? materialTheme.COLORS.DISABLE_BUTTON_COLOR : materialTheme.COLORS.BUTTON_COLOR}
@@ -213,8 +213,8 @@ class ForgotPassword extends React.Component {
                   <Text
                     color={theme.COLORS.BLACK} 
                     size={theme.SIZES.FONT}>SEND OTP ON EMAIL</Text>
-                </Button>             
-                {displayOtp && <Block style={styles.passwordContainerStyle}><Input
+                </Button>}       
+                {!displayPassword && displayOtp && <Block style={styles.passwordContainerStyle}><Input
                   borderless
                   editable={!displayPassword}
                   color="white"

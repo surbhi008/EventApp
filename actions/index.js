@@ -38,3 +38,23 @@ export const callChangePassword = (data) => ({
     data: data
 });
 
+export const callEventListApi = (data) => ({
+    type: "EVENT_LIST",
+    data: data
+});
+
+export const callAddEventApi = (data) => ({
+    type: "ADD_EVENT",
+    data: data
+});
+
+export const callDeleteEventApi = (data) => ({
+    type: "DELETE_EVENT",
+    data: data
+});
+
+export const callUpdateEventApi = (data) => ({
+    type: "UPDATE_EVENT",
+    data: data
+});
+

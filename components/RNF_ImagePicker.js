@@ -5,7 +5,7 @@ import { materialTheme } from '../constants';
 import { Button, Text, theme } from 'galio-framework';
 const { width } = Dimensions.get('window');
 
-export default function RNF_ImagePicker() {
+export default function RNF_ImagePicker(props) {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -34,6 +34,8 @@ export default function RNF_ImagePicker() {
     }
   };
 
+  const buttonTitle = props.title || "Pick an image from camera roll"
+
   return (
     <View style={{
       flex:1,
@@ -42,7 +44,7 @@ export default function RNF_ImagePicker() {
       alignItems: 'center', justifyContent: 'center', backgroundColor: materialTheme.COLORS.INFO, 
  }}>
    <Button style={{width: width - theme.SIZES.BASE * 4}} shadowless color={materialTheme.COLORS.INFO} onPress={pickImage} > 
-      <Text size={16} bold color={theme.COLORS.BLACK}>Pick an image from camera roll</Text>
+      <Text size={16} color={theme.COLORS.BLACK}>{buttonTitle}</Text>
     </Button>
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
     </View>

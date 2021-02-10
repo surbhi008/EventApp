@@ -32,7 +32,7 @@ class Product extends React.Component {
         }
         }>
           <Block flex style={[styles.imageContainer, styles.shadow]}>
-            <Image source={{ uri: product.image }} style={imageStyles} />
+            <Image source={{ uri: "https://images.unsplash.com/photo-1539314171919-908b0cd96f03?crop=entropy&w=840&h=840&fit=crop" }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('Product', { product: product })}>

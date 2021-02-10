@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, Alert, RefreshControl } from 'react-native';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
 import withLoadingScreen from '../HOC/spinner';
 
@@ -7,19 +7,36 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, Product } from '../components';
 
 const { width } = Dimensions.get('screen');
-import homeImages from '../constants/images/home';
+import Swipeout from 'react-native-swipeout';
 import { compose } from "recompose"
 
 import { connect } from 'react-redux'
-import { profileApiCall } from '../actions';
+import { callDeleteEventApi, callEventListApi, profileApiCall } from '../actions';
 
 class Events extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      eventList : [],
+      refreshing: false
+    }
   }
   
   componentDidMount() {
-    this.props.getProfileData()
+    this.props.getProfileData()   
+    this.callEventListApi() 
+  }
+
+  callEventListApi() {
+    const request = {
+      callback: (response) => {
+          this.setState({
+            eventList : response.data && response.data.eventList,
+            refreshing: false
+          }, () => {console.log("data===>",this.state.eventList)})
+      }
+    }
+    this.props.getEventList(request)
   }
 
   renderSearch = () => {
@@ -40,7 +57,6 @@ class Events extends React.Component {
   }
   
   renderTabs = () => {
-    const { navigation } = this.props;
 
     return (
       <Block row style={styles.tabs}>
@@ -65,21 +81,60 @@ class Events extends React.Component {
         </Button>
       </Block>
     )
+  }  
+
+  deleteEvent(data) {
+    console.log("delete",data)
+    const request = {
+      id: data.id,
+      callback: (response) => {
+        this.callEventListApi() 
+        if(response.success) {
+          Alert.alert('Event has deleted.');
+        }
+      }
+    }
+    this.props.deleteEventList(request)
   }
 
-  renderProducts = () => {
+  editEvent(data) {
+    const { navigation } = this.props;
+    let eventData = {...data, isEdit: true}
+    navigation.navigate('Host', eventData)
+  }
+
+  renderProductRow (data) {
+    let swipeRightBtns = [{
+      text: 'Delete',
+      backgroundColor: 'red',
+      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      onPress: () => { this.deleteEvent(data) }
+    }];
+    let swipeLeftBtns = [{
+      text: 'Edit',
+      backgroundColor: "#383838",
+      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      onPress: () => { this.editEvent(data) }
+    }];
+    return(
+        <Swipeout 
+        left={swipeLeftBtns}
+        right={swipeRightBtns}
+          style={{marginVertical: 20, borderRadius: 10, color: "black"}}
+          autoClose='true'
+          backgroundColor= 'transparent'>
+            <Product product={data} full />
+        </Swipeout>
+    )
+  }
+
+  renderProducts = () => {    
     return (
-      // <ScrollView
-      //   showsVerticalScrollIndicator={false}
-      //   contentContainerStyle={styles.products}>
-        <Block flex style={styles.products}>
-          <Product product={homeImages[0]} full />
-          <Product product={homeImages[1]} full />
-          <Product product={homeImages[2]} full />
-          <Product product={homeImages[3]} full />
-          <Product product={homeImages[4]} full />
-        </Block>
-      // </ScrollView>
+      <Block flex style={styles.products}>
+        {this.state.eventList && this.state.eventList.map(data => 
+        this.renderProductRow(data)
+        )}                   
+      </Block>
     )
   }
 
@@ -91,7 +146,16 @@ class Events extends React.Component {
         locations={[0.2, 1]}
         colors={['#000000', '#000000']}
         style={[{flex: 1, paddingTop: theme.SIZES.BASE}]}>
-      <ScrollView flex center style={styles.home}>
+      <ScrollView flex center style={styles.home}
+       refreshControl={
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={() => {
+            this.setState({refreshing: true})
+            this.callEventListApi()}
+          }
+        />
+      }>
         {this.renderTabs()}
         {/* {this.renderSearch()} */}
         {this.renderProducts()}
@@ -154,6 +218,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   getProfileData: (data) => dispatch(profileApiCall(data)),
+  getEventList: (data) => dispatch(callEventListApi(data)),
+  deleteEventList: (data) => dispatch(callDeleteEventApi(data)),
 })
 
 const mapStateToProps = (state) => ({
