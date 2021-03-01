@@ -11,6 +11,7 @@ export const web_urls = {
     ADD_EVENT : "Masters/Event/Add",
     DELETE_EVENT : "Masters/Event/Delete",
     UPDATE_EVENT : "Masters/Event/Update",
+    UPDATE_IMAGE : "Masters/Profile/UpdateUserImageData",
     // /api/V1/Masters/Profile/VerifyOTP/{Type}/{UserEmail}/{OTP}
     // /api/V1/Masters/Profile/ResetPassword
 }

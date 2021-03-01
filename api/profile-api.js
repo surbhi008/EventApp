@@ -46,3 +46,30 @@ export const updateProfile = (url, data) => {
             console.error(error);
         });
 }
+
+export const updateProfileImage = (url, data) => {
+    const body = {
+        "ImageFileName": "profile",
+        "ImageFile": data.imageData              
+    }
+
+    let formdata = new FormData();
+    formdata.append("ImageFileName", 'test')
+    formdata.append("ImageFile", {uri: data.imageData, name: 'image.jpg', type: 'image/jpeg'})
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        body: formdata
+    };
+
+    return fetch(url, requestOptions)
+        .then(response =>                     
+            response.json()            
+        ).then((json) => {
+            return handleError(json);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}

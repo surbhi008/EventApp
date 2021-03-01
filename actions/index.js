@@ -58,3 +58,8 @@ export const callUpdateEventApi = (data) => ({
     data: data
 });
 
+export const callUpdateImageApi = (data) => ({
+    type: "UPLOAD_IMAGE",
+    data: data
+});
+

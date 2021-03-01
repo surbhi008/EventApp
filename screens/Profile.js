@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, View } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform, View, Alert } from 'react-native';
 import { Block, Text, theme, Button } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -13,8 +13,9 @@ import { compose } from "recompose"
 import { connect } from 'react-redux'
 import withLoadingScreen from '../HOC/spinner';
 import { Followers } from './Followers';
-import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 import { MaterialIcons } from '@expo/vector-icons';
+import { callUpdateImageApi } from '../actions';
+// response.uri from react-native-camera
 
 class Profile extends React.Component {
 
@@ -41,11 +42,20 @@ class Profile extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true
     });
     if (!result.cancelled) {
       this.setState({
         image: result.uri
       })
+      const request = {
+        callback: () => {
+          Alert.alert("image uploaded")
+        },
+        imageData: result.uri
+      }      
+
+      this.props.callUpdateImageApi(request)
     }
   }
 
@@ -228,6 +238,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   getProfileData: (data) => dispatch(profileApiCall(data)),
+  callUpdateImageApi: (data) =>dispatch(callUpdateImageApi(data))
 })
 
 const mapStateToProps = (state) => ({

@@ -1,7 +1,7 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 import { getAuthData } from '../reducers/auth-reducer';
 import { web_urls } from '../api/api-const';
-import { profile, updateProfile } from '../api/profile-api';
+import { profile, updateProfile, updateProfileImage } from '../api/profile-api';
 
 function* getProfileSaga() {
     const profileData = yield select(getAuthData);
@@ -23,8 +23,21 @@ function* updateProfileSaga(action) {
     yield put({ type: "IS_LOADING", data: false, });
 }
 
+// fetch Update Profile
+function* updateProfileImageSaga(action) {
+    const { callback, imageData} = action.data   
+    const profileData = yield select(getAuthData);
+    yield put({ type: "IS_LOADING", data: true, });    
+    const json = yield call(updateProfileImage, `${web_urls.BASE_URL}${web_urls.UPDATE_IMAGE}/${profileData.userId}/a`, {imageData})
+    if (callback) {
+        callback(json)
+    }
+    yield put({ type: "IS_LOADING", data: false, });
+}
+
 export function* profileActionWatcher() {
     yield takeLatest('PROFILE_API', getProfileSaga)
     yield takeLatest('UPDATEPROFILE_API', updateProfileSaga)
+    yield takeLatest('UPLOAD_IMAGE', updateProfileImageSaga)
 }
 
